@@ -1,7 +1,7 @@
 # Copyright 2024 Ole Kliemann
 # SPDX-License-Identifier: Apache-2.0
 
-from result import Ok, returns_result
+from rust_result import Ok, Err, returns_result
 from collections import namedtuple
 import json
 import logging

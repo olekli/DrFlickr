@@ -3,7 +3,7 @@
 
 from drflickr.file import readYaml
 
-from result import Err, is_ok, is_err
+from rust_result import Ok, Err, returns_result
 import json
 import os
 import logging
@@ -15,14 +15,14 @@ def getCredentials(creds_path, name):
     filename = os.path.join(creds_path, f'{name}.yaml')
     credentials = readYaml(filename)
     if (
-        not is_ok(credentials)
-        or 'key' not in credentials.ok_value
-        or 'secret' not in credentials.ok_value
+        not credentials.is_ok()
+        or 'key' not in credentials.unwrap()
+        or 'secret' not in credentials.unwrap()
     ):
         logger.error(
             f'Provide {name} credentials as `key` and `secret` in file {filename}'
         )
-        if is_err(credentials):
+        if credentials.is_ok():
             logger.error(credentials.unwrap_err())
             return credentials
         else:

@@ -3,7 +3,7 @@
 
 from drflickr.api import Api
 from datetime import date, timedelta, datetime
-from result import Ok, Err, Result, is_ok, is_err, returns_result
+from rust_result import Ok, Err, returns_result
 from mrjsonstore import JsonStore
 import math
 import logging

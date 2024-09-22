@@ -14,7 +14,7 @@ from drflickr.stats import Stats
 from drflickr.group_info import GroupInfo
 from drflickr.operations_review import OperationsReview
 from mrjsonstore import JsonStore
-from result import Ok, Err, Result, is_ok, is_err, returns_result
+from rust_result import Ok, Err, returns_result
 import yaml
 import json
 import logging

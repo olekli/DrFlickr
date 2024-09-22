@@ -10,7 +10,7 @@ import re
 import time
 from datetime import datetime
 from requests_oauthlib import OAuth1
-from result import Ok, Err, Result, is_ok, is_err, returns_result
+from rust_result import Ok, Err, returns_result
 import logging
 
 logger = logging.getLogger(__name__)
@@ -71,7 +71,7 @@ class Api:
         )
 
         login = self.call('test.login')
-        if not is_ok(login):
+        if not login.is_ok():
             self.auth = None
             return login
         return Ok(self)
@@ -238,7 +238,7 @@ class Api:
     @returns_result()
     def getTotalViews(self, date):
         result = self.call('stats.getTotalViews', {'date': date})
-        if is_err(result):
+        if result.is_err():
             result = result.unwrap_err()
             if result.isApiError():
                 return Ok(0)

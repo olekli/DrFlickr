@@ -518,21 +518,25 @@ rsa = ["oauthlib[signedtoken] (>=3.0.0)"]
 
 [[package]]
 name = "result"
-version = "0.18.0.dev0"
+version = "0.17.0"
 description = "A Rust-like result type for Python"
 optional = false
 python-versions = ">=3.8"
-files = []
-develop = false
+files = [
+    {file = "result-0.17.0-py3-none-any.whl", hash = "sha256:49fd668b4951ad15800b8ccefd98b6b94effc789607e19c65064b775570933e8"},
+    {file = "result-0.17.0.tar.gz", hash = "sha256:b73da420c0cb1a3bf741dbd41ff96dedafaad6a1b3ef437a9e33e380bb0d91cf"},
+]
 
-[package.dependencies]
-typing-extensions = {version = ">=4.10.0", markers = "python_version < \"3.13\""}
-
-[package.source]
-type = "git"
-url = "https://github.com/olekli/result.git"
-reference = "emulate_question_mark_operator"
-resolved_reference = "4b99657dbd4261447d7e5e81e5edac115dc10752"
+[[package]]
+name = "rust-result"
+version = "0.1.0"
+description = ""
+optional = false
+python-versions = ">=3.10"
+files = [
+    {file = "rust_result-0.1.0-py3-none-any.whl", hash = "sha256:55ce2bc7ac6dcead662bf54d15a3ae91d6c6b3ec778745600994d43215f06c4d"},
+    {file = "rust_result-0.1.0.tar.gz", hash = "sha256:424a8b336e3593a832f5ab8c814f248221a85fc0d037e8244a3c88100c492214"},
+]
 
 [[package]]
 name = "setuptools"
@@ -596,4 +600,4 @@ zstd = ["zstandard (>=0.18.0)"]
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.10"
-content-hash = "3216c49922b3f7a9b829c0048002e9cc8cb544556fcbcc1f892e4ef12597bbb8"
+content-hash = "abee3b20bacdb4e0c854668d5ba695822593fd785d8443758fbee91c8869f112"

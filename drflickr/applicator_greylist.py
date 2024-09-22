@@ -1,8 +1,6 @@
 # Copyright 2024 Ole Kliemann
 # SPDX-License-Identifier: Apache-2.0
 
-from result import is_ok
-
 import hashlib
 import json
 import time
@@ -18,7 +16,7 @@ class ApplicatorGreylist:
 
     def update(self, operation, result):
         key = self.makeKey(operation)
-        if is_ok(result):
+        if result.is_ok():
             if key in self.greylist:
                 del self.greylist[key]
         else:

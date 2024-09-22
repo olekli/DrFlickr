@@ -1,7 +1,7 @@
 # Copyright 2024 Ole Kliemann
 # SPDX-License-Identifier: Apache-2.0
 
-from result import Ok, Err, Result, is_ok, is_err, returns_result
+from rust_result import Ok, Err, returns_result
 from mrjsonstore import JsonStore
 import logging
 
@@ -20,8 +20,8 @@ class GroupInfo:
         else:
             with self.group_names() as group_names:
                 result = self.api.getGroupInfo(group_id)
-                if is_ok(result):
-                    group_names[group_id] = result.ok_value
-                    return result.ok_value
+                if result.is_ok():
+                    group_names[group_id] = result.unwrap()
+                    return result.unwrap()
                 else:
                     return {'name': group_id}

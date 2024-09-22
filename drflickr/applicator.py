@@ -5,8 +5,7 @@ from drflickr.applicator_greylist import ApplicatorGreylist
 from drflickr.photoset import getPhotosetAsOrderedList
 from drflickr.api import ApiError, NetworkError
 
-from result import Ok, Err, Result, is_ok, is_err, returns_result
-
+from rust_result import Ok, Err, returns_result
 from collections import namedtuple
 import json
 import time
@@ -43,7 +42,7 @@ class Applicator:
                 if not op in greylist:
                     result = getattr(self, op["method"])(*op["params"])
                     greylist.update(op, result)
-                    applied.append(is_ok(result))
+                    applied.append(result.is_ok())
         return namedtuple("ApplicatorResult", ["result", "greylist"])(
             all(applied), greylist.to_dict()
         )
@@ -51,7 +50,7 @@ class Applicator:
     def addPhotoToGroup(self, photo, group_id):
         logger.info(f'Adding photo {photo["title"]} to group {group_id}')
         result = self.api.addPhotoToGroup(photo, group_id)
-        if is_ok(result):
+        if result.is_ok():
             # photo was added successfully
             self.submissions.add(photo, group_id)
             return result
@@ -99,7 +98,7 @@ class Applicator:
     def removePhotoFromGroup(self, photo, group_id):
         logger.info(f'Removing photo {photo["title"]} from group {group_id}')
         result = self.api.removePhotoFromGroup(photo, group_id)
-        if is_ok(result):
+        if result.is_ok():
             self.submissions.remove(photo, group_id)
         else:
             result = result.unwrap_err()

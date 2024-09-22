@@ -5,7 +5,7 @@ from drflickr.cli.path_options import creds_path_option
 from drflickr.credentials import getCredentials
 from drflickr.file import readYaml, writeYaml
 from drflickr.api import Api
-from result import Ok, is_ok, is_err, returns_result
+from rust_result import Ok, Err, returns_result
 
 import json
 import os
@@ -32,7 +32,7 @@ def make_authorization_url(creds_path):
     os.umask(0o077)
 
     client_credentials = getCredentials(creds_path, 'api-key')
-    if not is_ok(client_credentials):
+    if not client_credentials.is_ok():
         raise click.exceptions.Exit(code=1)
 
     client_credentials = client_credentials.unwrap()
@@ -53,7 +53,7 @@ def make_authorization_url(creds_path):
         resource_owner_filename,
         {'key': resource_owner_key, 'secret': resource_owner_secret},
     )
-    if not is_ok(result):
+    if not result.is_ok():
         logger.error(
             f'Cannot write resource owner credentials to {filename}: {result.unwrap_err()}'
         )
@@ -69,13 +69,13 @@ def make_access_token(creds_path, redirect_url):
     os.umask(0o077)
 
     resource_owner_creds = getCredentials(creds_path, 'resource-owner-credentials')
-    if is_err(resource_owner_creds):
+    if resource_owner_creds.is_ok():
         logger.error(f'Do make-authorization-url first!')
         raise click.exceptions.Exit(code=1)
     resource_owner_creds = resource_owner_creds.unwrap()
 
     client_credentials = getCredentials(creds_path, 'api-key')
-    if not is_ok(client_credentials):
+    if not client_credentials.is_ok():
         raise click.exceptions.Exit(code=1)
     client_credentials = client_credentials.unwrap()
 
@@ -97,7 +97,7 @@ def make_access_token(creds_path, redirect_url):
     access_token = oauth.fetch_access_token(access_token_url)
     access_token_filename = os.path.join(creds_path, 'access-token.yaml')
     result = writeYaml(access_token_filename, access_token)
-    if is_ok(result):
+    if result.is_ok():
         print(f'Access token written to: {access_token_filename}')
         os.remove(os.path.join(creds_path, 'resource-owner-credentials.yaml'))
     else:
@@ -125,7 +125,7 @@ def _test(creds_path):
 @creds_path_option
 def test(creds_path):
     result = _test(creds_path)
-    if is_ok(result):
+    if result.is_ok():
         print(f'Access to Flickr is set up correctly!')
     else:
         print(f'Cannot access Flickr: {result.unwrap_err()}')
