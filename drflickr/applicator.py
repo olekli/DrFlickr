@@ -1,0 +1,131 @@
+# Copyright 2024 Ole Kliemann
+# SPDX-License-Identifier: Apache-2.0
+
+from drflickr.applicator_greylist import ApplicatorGreylist
+from drflickr.photoset import getPhotosetAsOrderedList
+from drflickr.api import ApiError, NetworkError
+
+from result import Ok, Err, Result, is_ok, is_err, returns_result
+
+from collections import namedtuple
+import json
+import time
+import logging
+
+logger = logging.getLogger(__name__)
+
+
+class Applicator:
+    methods = [
+        "addPhotoToGroup",
+        "removePhotoFromGroup",
+        "publishPhoto",
+        "updatePhotoDates",
+        "addPhotoToSet",
+        "removePhotoFromSet",
+        "reorderSet",
+    ]
+
+    def __init__(self, api, submissions, group_info, config):
+        self.api = api
+        self.submissions = submissions
+        self.group_info = group_info
+        self.config = config
+
+    def __call__(self, operations, photosets, greylist):
+        self.photosets = photosets
+        greylist = ApplicatorGreylist(
+            json.loads(json.dumps(greylist)), self.config["greylist"]
+        )
+        applied = []
+        for op in operations:
+            if op["method"] in Applicator.methods:
+                if not op in greylist:
+                    result = getattr(self, op["method"])(*op["params"])
+                    greylist.update(op, result)
+                    applied.append(is_ok(result))
+        return namedtuple("ApplicatorResult", ["result", "greylist"])(
+            all(applied), greylist.to_dict()
+        )
+
+    def addPhotoToGroup(self, photo, group_id):
+        logger.info(f'Adding photo {photo["title"]} to group {group_id}')
+        result = self.api.addPhotoToGroup(photo, group_id)
+        if is_ok(result):
+            # photo was added successfully
+            self.submissions.add(photo, group_id)
+            return result
+        else:
+            result = result.unwrap_err()
+            if isinstance(result, ApiError):
+                if result.code == 3:
+                    # already in pool
+                    logger.info(
+                        f'{photo["title"]}: group {self.group_info.get(group_id)["name"]} has photo already in pool'
+                    )
+                    self.submissions.add(photo, group_id)
+                    return Ok(result)
+                elif result.code == 4:
+                    # already in max pools
+                    logger.info(f'{photo["title"]}: already in max pools')
+                    self.submissions.add(photo, group_id)
+                    return Ok(result)
+                elif result.code == 5:
+                    # photo limit
+                    logger.info(
+                        f'group {self.group_info.get(group_id)["name"]} photo limit hit'
+                    )
+                    return Err(result)
+                elif (result.code == 6) or (result.code == 7):
+                    # photo already in pending
+                    # in case this entry was missed in submissions, add it now
+                    logger.info(
+                        f'{photo["title"]}: group {self.group_info.get(group_id)["name"]} has photo in pending'
+                    )
+                    self.submissions.add(photo, group_id)
+                    return Ok(result)
+                else:
+                    logger.warning(
+                        f'adding {photo["title"]} to {self.group_info.get(group_id)["name"]}: {result}'
+                    )
+                    return Err(result)
+            else:
+                logger.warning(
+                    f'adding {photo["title"]} to {self.group_info.get(group_id)["name"]}: {result}'
+                )
+                return Err(result)
+        assert False
+
+    def removePhotoFromGroup(self, photo, group_id):
+        logger.info(f'Removing photo {photo["title"]} from group {group_id}')
+        result = self.api.removePhotoFromGroup(photo, group_id)
+        if is_ok(result):
+            self.submissions.remove(photo, group_id)
+        else:
+            result = result.unwrap_err()
+            if isinstance(result, ApiError):
+                if result.code == 2:
+                    # Photo already removed from pool
+                    self.submissions.remove(photo, group_id)
+                    return Ok(result)
+        return result
+
+    def publishPhoto(self, photo):
+        logger.info(f'Publishing new photo: {photo["title"]}')
+        return self.api.publishPhoto(photo)
+
+    def updatePhotoDates(self, photo):
+        logger.info(f'Updating photo dates: {photo["title"]}')
+        return self.api.updatePhotoDates(photo)
+
+    def addPhotoToSet(self, photo, set_name):
+        logger.info(f'Adding photo {photo["title"]} to set {set_name}')
+        return self.api.addPhotoToSet(photo, self.photosets[set_name])
+
+    def removePhotoFromSet(self, photo, set_name):
+        logger.info(f'Removing photo {photo["title"]} from set {set_name}')
+        return self.api.removePhotoFromSet(photo, self.photosets[set_name])
+
+    def reorderSet(self, set_name, ordered_list):
+        logger.info(f"Reordering set {set_name}: {ordered_list}")
+        return self.api.reorderSet(self.photosets[set_name], ordered_list)

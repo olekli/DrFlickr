@@ -1,0 +1,26 @@
+[tool.poetry]
+name = "drflickr"
+version = "0.1.0"
+description = "Provides a daemon to automate certain tasks on Flickr"
+authors = ["Ole Kliemann <mail@olekliemann.de>"]
+
+[tool.poetry.dependencies]
+python = "^3.10"
+requests-oauthlib = "^2.0.0"
+result = { git = "https://github.com/olekli/result.git", branch = "emulate_question_mark_operator" }
+click = "^8.1.7"
+mrjsonstore = "^0.4.0"
+pyyaml = "^6.0.2"
+python-daemon = "^3.0.1"
+
+[tool.poetry.group.dev.dependencies]
+pytest = "^8.3.3"
+
+deepdiff = "^8.0.1"
+black = "^24.8.0"
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
+
+[tool.poetry.scripts]
+drflickr = 'drflickr.cli.main:main'

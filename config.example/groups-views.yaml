@@ -1,0 +1,72 @@
+- name: 'Views: 100'
+  nsid: 37045109@N00
+  ge: 100
+  less: 200
+- name: 'Views: 200'
+  nsid: 35419517@N00
+  ge: 200
+  less: 300
+- name: 'Views: 300'
+  nsid: 76852794@N00
+  ge: 300
+  less: 400
+- name: 'Views: 400'
+  nsid: 97866666@N00
+  ge: 400
+  less: 500
+- name: 'Views: 500'
+  nsid: 32266655@N00
+  ge: 500
+  less: 600
+- name: 'Views: 600'
+  nsid: 50687206@N00
+  ge: 600
+  less: 700
+- name: 'Views: 700'
+  nsid: 65104419@N00
+  ge: 700
+  less: 800
+- name: 'Views: 800'
+  nsid: 87608476@N00
+  ge: 800
+  less: 900
+- name: 'Views: 900'
+  nsid: 79303709@N00
+  ge: 900
+  less: 1000
+- name: 'Views: 1000'
+  nsid: 85342170@N00
+  ge: 1000
+  less: 1250
+- name: 'Views: 1250'
+  nsid: 66448677@N00
+  ge: 1250
+  less: 1500
+- name: 'Views: 1500'
+  nsid: 18374590@N00
+  ge: 1500
+  less: 1750
+- name: 'Views: 1750'
+  nsid: 25661400@N00
+  ge: 1750
+  less: 2000
+- name: 'Views: 2000'
+  nsid: 44588749@N00
+  ge: 2000
+  less: 3000
+- name: 'Views: 3000'
+  nsid: 10386539@N00
+  ge: 3000
+  less: 4000
+- name: 'Views: 4000'
+  nsid: 69218008@N00
+  ge: 4000
+  less: 5000
+- name: 'Views: 5000'
+  nsid: 52498228@N00
+  ge: 5000
+  less: 10000
+- name: 'Views: 10000'
+  nsid: 28114976@N00
+  ge: 10000
+  less: 100000

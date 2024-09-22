@@ -1,0 +1,76 @@
+- name: 'Favorites: 5'
+  nsid: 23212187@N00
+  ge: 5
+  less: 10
+- name: 'Favorites: 10'
+  nsid: 32696028@N00
+  ge: 10
+  less: 15
+- name: 'Favorites: 15'
+  nsid: 55448033@N00
+  ge: 15
+  less: 20
+- name: 'Favorites: 20'
+  nsid: 44113240@N00
+  ge: 20
+  less: 25
+- name: 'Favorites: 25'
+  nsid: 87851696@N00
+  ge: 25
+  less: 30
+- name: 'Favorites: 30'
+  nsid: 62941613@N00
+  ge: 30
+  less: 35
+- name: 'Favorites: 35'
+  nsid: 43586013@N00
+  ge: 35
+  less: 40
+- name: 'Favorites: 40'
+  nsid: 82101185@N00
+  ge: 40
+  less: 45
+- name: 'Favorites: 45'
+  nsid: 23275181@N00
+  ge: 45
+  less: 50
+- name: 'Favorites: 50'
+  nsid: 73922978@N00
+  ge: 50
+  less: 60
+- name: 'Favorites: 60'
+  nsid: 17823522@N00
+  ge: 60
+  less: 70
+- name: 'Favorites: 70'
+  nsid: 61173387@N00
+  ge: 70
+  less: 80
+- name: 'Favorites: 80'
+  nsid: 68314581@N00
+  ge: 80
+  less: 90
+- name: 'Favorites: 90'
+  nsid: 79599269@N00
+  ge: 90
+  less: 100
+- name: 'Favorites: 100'
+  nsid: 87001399@N00
+  ge: 100
+  less: 125
+- name: 'Favorites: 125'
+  nsid: 11104469@N00
+  ge: 125
+  less: 150
+- name: 'Favorites: 150'
+  nsid: 71151677@N00
+  ge: 150
+  less: 175
+- name: 'Favorites: 175'
+  nsid: 52214013@N00
+  ge: 175
+  less: 200
+- name: 'Favorites: 200'
+  nsid: 85932922@N00
+  ge: 200
+  less: 10000

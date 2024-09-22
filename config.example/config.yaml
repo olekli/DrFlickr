@@ -1,0 +1,31 @@
+logic:
+  managed_album: All
+  group_checker:
+    stats:
+      required_tag: photography
+      delay: 120
+    tags:
+      group_add_limit: 1
+  publisher:
+    queue_album: Queue
+    showcase_album: Showcase
+    time_window_start: 8
+    time_window_end: 9
+  reorderer:
+    enabled: false
+    days_until_being_ordered: 7
+  greylist:
+    group:
+      photo_added: 16
+      photo_added_to_category: 1
+    photo:
+      added_to_group: 1
+      published: 6
+    publish:
+      published: 40
+    ordering:
+      photos_ordered: 24
+applicator:
+  greylist:
+    max_attempts: 3
+    timeout: 24
