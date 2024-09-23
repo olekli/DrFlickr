@@ -93,7 +93,7 @@ class Reconciler:
                     'method': 'reorderSet',
                     'params': [
                         set_name,
-                        getPhotosetAsOrderedList(photos_expected.values(), set_name),
+                        [ photo['id'] for photo in getPhotosetAsOrderedList(photos_expected.values(), set_name) ],
                     ],
                 }
             )

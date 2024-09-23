@@ -63,7 +63,7 @@ def run(dry_run, config_path, run_path, creds_path):
         result = runner().unwrap()
     except Exception as e:
         logging.critical(f'Runner failed: {traceback.format_exc()}')
-        return
+        raise
     logging.info(f'Runner succeeded. Fully reconciled: {result}')
 
 
