@@ -28,6 +28,7 @@ class Publisher:
             if len(queue) > 0:
                 greylist.add('publish', 'published')
                 photo_to_publish = queue[0]
+                greylist.add('photo', photo_to_publish['id'], 'published')
                 photo_to_publish['date_posted'] = int(time.time())
                 photo_to_publish['date_taken'] = photo_to_publish['date_posted']
                 del photo_to_publish['sets'][queue_album]

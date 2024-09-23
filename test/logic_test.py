@@ -2089,7 +2089,8 @@ def test_case_16():
     assert result.photos_expected['photo-2']['is_public'] == True
     assert result.photos_expected['photo-2']['sets'] == { 'All': 2, 'Showcase': 0 }
     assert len(result.greylist['group']) == 0
-    assert len(result.greylist['photo']) == 0
+    assert len(result.greylist['photo']) == 1
+    assert 'photo-2' in result.greylist['photo']
     assert len(result.greylist['publish']) == 1
     assert len(result.greylist['ordering']) == 1
     assert 'photos_ordered' in result.greylist['ordering']
