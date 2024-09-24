@@ -27,5 +27,5 @@ logic:
       photos_ordered: 24
 applicator:
   greylist:
-    max_attempts: 3
+    max_attempts: 14
     timeout: 24
