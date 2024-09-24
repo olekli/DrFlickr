@@ -10,7 +10,7 @@ import re
 import time
 from datetime import datetime
 from requests_oauthlib import OAuth1
-from rust_result import Ok, Err, returns_result
+from drresult import Ok, Err, returns_result
 import logging
 
 logger = logging.getLogger(__name__)

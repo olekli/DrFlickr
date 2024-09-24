@@ -5,7 +5,7 @@ from drflickr.cli.path_options import creds_path_option
 from drflickr.credentials import getCredentials
 from drflickr.file import readYaml, writeYaml
 from drflickr.api import Api
-from rust_result import Ok, Err, returns_result
+from drresult import Ok, Err, returns_result
 
 import json
 import os

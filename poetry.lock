@@ -47,8 +47,6 @@ mypy-extensions = ">=0.4.3"
 packaging = ">=22.0"
 pathspec = ">=0.9.0"
 platformdirs = ">=2"
-tomli = {version = ">=1.1.0", markers = "python_version < \"3.11\""}
-typing-extensions = {version = ">=4.0.1", markers = "python_version < \"3.11\""}
 
 [package.extras]
 colorama = ["colorama (>=0.4.3)"]
@@ -221,18 +219,15 @@ files = [
 ]
 
 [[package]]
-name = "exceptiongroup"
-version = "1.2.2"
-description = "Backport of PEP 654 (exception groups)"
+name = "drresult"
+version = "0.2.1"
+description = ""
 optional = false
-python-versions = ">=3.7"
+python-versions = ">=3.12"
 files = [
-    {file = "exceptiongroup-1.2.2-py3-none-any.whl", hash = "sha256:3111b9d131c238bec2f8f516e123e14ba243563fb135d3fe885990585aa7795b"},
-    {file = "exceptiongroup-1.2.2.tar.gz", hash = "sha256:47c2edf7c6738fafb49fd34290706d1a1a2f4d1c6df275526b62cbb4aa5393cc"},
+    {file = "drresult-0.2.1-py3-none-any.whl", hash = "sha256:a8f305cf6266f661a091388f13b4571372e94834712da6cfe2e083ad84fcf439"},
+    {file = "drresult-0.2.1.tar.gz", hash = "sha256:a4e36db34c93b9ce17f778de831e7c6d5b039d2afd0a2021753fed9e556b3aa5"},
 ]
-
-[package.extras]
-test = ["pytest (>=6)"]
 
 [[package]]
 name = "idna"
@@ -269,13 +264,13 @@ files = [
 
 [[package]]
 name = "mrjsonstore"
-version = "0.4.0"
+version = "0.4.1"
 description = "Simple, transparent on-disk JSON store"
 optional = false
-python-versions = "<4.0,>=3.10"
+python-versions = ">=3.10"
 files = [
-    {file = "mrjsonstore-0.4.0-py3-none-any.whl", hash = "sha256:e6c341b2be970a3bb3deabd54cfa33029a8e1ffabee726e38130172d099224fa"},
-    {file = "mrjsonstore-0.4.0.tar.gz", hash = "sha256:d6ac55fe48a849d649a9a2411de79505d45ef40d734293af01f3cf05957376f0"},
+    {file = "mrjsonstore-0.4.1-py3-none-any.whl", hash = "sha256:80023fcc77beb51f19bf8124df7b90da769769213052e6806a2086ff742dbd1c"},
+    {file = "mrjsonstore-0.4.1.tar.gz", hash = "sha256:dd9f0bbfdfbd351ede5067368e88447f7b94013486dfc53018fc728f18132a90"},
 ]
 
 [package.dependencies]
@@ -386,11 +381,9 @@ files = [
 
 [package.dependencies]
 colorama = {version = "*", markers = "sys_platform == \"win32\""}
-exceptiongroup = {version = ">=1.0.0rc8", markers = "python_version < \"3.11\""}
 iniconfig = "*"
 packaging = "*"
 pluggy = ">=1.5,<2"
-tomli = {version = ">=1", markers = "python_version < \"3.11\""}
 
 [package.extras]
 dev = ["argcomplete", "attrs (>=19.2)", "hypothesis (>=3.56)", "mock", "pygments (>=2.7.2)", "requests", "setuptools", "xmlschema"]
@@ -528,17 +521,6 @@ files = [
 ]
 
 [[package]]
-name = "rust-result"
-version = "0.1.0"
-description = ""
-optional = false
-python-versions = ">=3.10"
-files = [
-    {file = "rust_result-0.1.0-py3-none-any.whl", hash = "sha256:55ce2bc7ac6dcead662bf54d15a3ae91d6c6b3ec778745600994d43215f06c4d"},
-    {file = "rust_result-0.1.0.tar.gz", hash = "sha256:424a8b336e3593a832f5ab8c814f248221a85fc0d037e8244a3c88100c492214"},
-]
-
-[[package]]
 name = "setuptools"
 version = "75.1.0"
 description = "Easily download, build, install, upgrade, and uninstall Python packages"
@@ -559,28 +541,6 @@ test = ["build[virtualenv] (>=1.0.3)", "filelock (>=3.4.0)", "ini2toml[lite] (>=
 type = ["importlib-metadata (>=7.0.2)", "jaraco.develop (>=7.21)", "mypy (==1.11.*)", "pytest-mypy"]
 
 [[package]]
-name = "tomli"
-version = "2.0.1"
-description = "A lil' TOML parser"
-optional = false
-python-versions = ">=3.7"
-files = [
-    {file = "tomli-2.0.1-py3-none-any.whl", hash = "sha256:939de3e7a6161af0c887ef91b7d41a53e7c5a1ca976325f429cb46ea9bc30ecc"},
-    {file = "tomli-2.0.1.tar.gz", hash = "sha256:de526c12914f0c550d15924c62d72abc48d6fe7364aa87328337a31007fe8a4f"},
-]
-
-[[package]]
-name = "typing-extensions"
-version = "4.12.2"
-description = "Backported and Experimental Type Hints for Python 3.8+"
-optional = false
-python-versions = ">=3.8"
-files = [
-    {file = "typing_extensions-4.12.2-py3-none-any.whl", hash = "sha256:04e5ca0351e0f3f85c6853954072df659d0d13fac324d0072316b67d7794700d"},
-    {file = "typing_extensions-4.12.2.tar.gz", hash = "sha256:1a7ead55c7e559dd4dee8856e3a88b41225abfe1ce8df57b7c13915fe121ffb8"},
-]
-
-[[package]]
 name = "urllib3"
 version = "2.2.2"
 description = "HTTP library with thread-safe connection pooling, file post, and more."
@@ -599,5 +559,5 @@ zstd = ["zstandard (>=0.18.0)"]
 
 [metadata]
 lock-version = "2.0"
-python-versions = "^3.10"
-content-hash = "abee3b20bacdb4e0c854668d5ba695822593fd785d8443758fbee91c8869f112"
+python-versions = ">=3.12"
+content-hash = "01fcc2c1407bd4678bd55abf808c5ed638d4a1bbbf6cf528d2994b935de52131"

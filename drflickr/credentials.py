@@ -3,7 +3,7 @@
 
 from drflickr.file import readYaml
 
-from rust_result import Ok, Err, returns_result
+from drresult import Ok, Err, returns_result
 import json
 import os
 import logging

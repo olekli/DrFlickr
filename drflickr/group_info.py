@@ -1,7 +1,7 @@
 # Copyright 2024 Ole Kliemann
 # SPDX-License-Identifier: Apache-2.0
 
-from rust_result import Ok, Err, returns_result
+from drresult import Ok, Err, returns_result
 from mrjsonstore import JsonStore
 import logging
 

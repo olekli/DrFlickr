@@ -5,7 +5,7 @@ from drflickr.applicator_greylist import ApplicatorGreylist
 from drflickr.photoset import getPhotosetAsOrderedList
 from drflickr.api import ApiError, NetworkError
 
-from rust_result import Ok, Err, returns_result
+from drresult import Ok, Err, returns_result
 from collections import namedtuple
 import json
 import time
