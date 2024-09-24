@@ -1055,9 +1055,8 @@ def test_case_9():
     assert len(result.greylist['publish']) == 0
     assert len(result.greylist['ordering']) == 1
     assert 'photos_ordered' in result.greylist['ordering']
-    assert len(result.operations) == 2
+    assert len(result.operations) == 1
     assert result.operations[0]['method'] == 'removePhotoFromSet'
-    assert result.operations[1]['method'] == 'reorderSet'
 
 def test_case_10():
     # Some managed, some published, nothing in queue
@@ -1145,10 +1144,9 @@ def test_case_10():
     assert len(result.greylist['publish']) == 0
     assert len(result.greylist['ordering']) == 1
     assert 'photos_ordered' in result.greylist['ordering']
-    assert len(result.operations) == 3
+    assert len(result.operations) == 2
     assert result.operations[0]['method'] == 'publishPhoto'
     assert result.operations[1]['method'] == 'removePhotoFromSet'
-    assert result.operations[2]['method'] == 'reorderSet'
 
 def test_case_11():
     # Some managed, some published, nothing in queue
@@ -1235,9 +1233,8 @@ def test_case_11():
     assert len(result.greylist['publish']) == 0
     assert len(result.greylist['ordering']) == 1
     assert 'photos_ordered' in result.greylist['ordering']
-    assert len(result.operations) == 2
+    assert len(result.operations) == 1
     assert result.operations[0]['method'] == 'addPhotoToSet'
-    assert result.operations[1]['method'] == 'reorderSet'
 
 def test_case_12():
     # Some managed, some published, nothing in queue
@@ -2077,11 +2074,7 @@ def test_case_16():
     result = logic(photos_actual, photos_expected, greylist)
     assert len(result.photos_expected) == 3
     assert result.photos_expected['photo-1'] == photos_actual['photo-1']
-    assert not DeepDiff(
-        result.photos_expected['photo-3'], photos_actual['photo-3'],
-        exclude_paths=["root['sets']"]
-    )
-    assert result.photos_expected['photo-3']['sets'] == { 'All': 1, 'Queue': 0 }
+    assert result.photos_expected['photo-3'] == photos_actual['photo-3']
     assert not DeepDiff(
         result.photos_expected['photo-2'], photos_actual['photo-2'],
         exclude_paths=["root['is_public']", "root['date_taken']", "root['date_posted']", "root['sets']"]
@@ -2094,7 +2087,7 @@ def test_case_16():
     assert len(result.greylist['publish']) == 1
     assert len(result.greylist['ordering']) == 1
     assert 'photos_ordered' in result.greylist['ordering']
-    assert len(result.operations) == 6
+    assert len(result.operations) == 4
     publish_photo = next(op for op in result.operations if op['method'] == 'publishPhoto')
     assert publish_photo['params'][0]['id'] == 'photo-2'
     update_photo_dates = (op for op in result.operations if op['method'] == 'publishPhoto')
@@ -2106,11 +2099,6 @@ def test_case_16():
     remove_photo_from_set = next(op for op in result.operations if op['method'] == 'removePhotoFromSet')
     assert remove_photo_from_set['params'][0]['id'] == 'photo-2'
     assert remove_photo_from_set['params'][1] == 'Queue'
-    reorder_set_ops = [op for op in result.operations if op['method'] == 'reorderSet']
-    sets_reordered = [op['params'][0] for op in reorder_set_ops]
-    assert len(sets_reordered) == 2
-    assert 'Queue' in sets_reordered
-    assert 'Showcase' in sets_reordered
 
 def test_case_17():
     # Some published, legit groups are added

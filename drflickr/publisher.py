@@ -32,17 +32,7 @@ class Publisher:
                 photo_to_publish['date_posted'] = int(time.time())
                 photo_to_publish['date_taken'] = photo_to_publish['date_posted']
                 del photo_to_publish['sets'][queue_album]
-                queue = getPhotosetAsOrderedList(photos, queue_album)
-                self.updatePhotoset(queue, queue_album)
-
-                showcase = getPhotosetAsOrderedList(photos, showcase_album)
-                showcase.insert(0, photo_to_publish)
-                self.updatePhotoset(showcase, showcase_album)
-
+                photo_to_publish['sets'][showcase_album] = 0
                 photo_to_publish['is_public'] = True
             else:
                 logger.info(f'no photos queued for publication')
-
-    def updatePhotoset(self, photoset, set_name):
-        for index, photo in enumerate(photoset):
-            photo['sets'][set_name] = index

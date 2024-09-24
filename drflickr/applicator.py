@@ -22,7 +22,6 @@ class Applicator:
         "updatePhotoDates",
         "addPhotoToSet",
         "removePhotoFromSet",
-        "reorderSet",
     ]
 
     def __init__(self, api, submissions, group_info, config):
@@ -124,7 +123,3 @@ class Applicator:
     def removePhotoFromSet(self, photo, set_name):
         logger.info(f'Removing photo {photo["title"]} from set {set_name}')
         return self.api.removePhotoFromSet(photo, self.photosets[set_name])
-
-    def reorderSet(self, set_name, ordered_list):
-        logger.info(f"Reordering set {set_name}: {ordered_list}")
-        return self.api.reorderSet(self.photosets[set_name], ordered_list)

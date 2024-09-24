@@ -246,14 +246,3 @@ class Api:
                 return Err(result)
         else:
             return result.unwrap()['stats']['total']['views']
-
-    @returns_result()
-    def reorderSet(self, photoset_id, photo_ids):
-        if not self.dry_run:
-            return self.call(
-                'photosets.reorderPhotos',
-                {'photoset_id': photoset_id, 'photo_ids': ','.join(photo_ids)},
-            )
-        else:
-            logger.info(f'dry run: reordering set {photoset_id}: {photo_ids}')
-            return Ok({'stat': 'success'})

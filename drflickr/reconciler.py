@@ -13,7 +13,6 @@ class Reconciler:
 
     def __call__(self, photos_actual, photos_expected):
         operations = []
-        sets_changed = []
         for photo_expected in photos_expected.values():
             photo_actual = photos_actual[photo_expected['id']]
             groups_to_add = [
@@ -75,27 +74,5 @@ class Reconciler:
                         'params': [photo_expected, set_name],
                     }
                 )
-            sets_changed += sets_to_add
-            sets_changed += sets_to_remove
-
-            reordered_sets = [
-                set_name
-                for set_name in photo_expected['sets']
-                if set_name in photo_actual['sets']
-                and photo_expected['sets'][set_name] != photo_actual['sets'][set_name]
-            ]
-            sets_changed += reordered_sets
-
-        sets_changed = list(dict.fromkeys(sets_changed))
-        for set_name in sets_changed:
-            operations.append(
-                {
-                    'method': 'reorderSet',
-                    'params': [
-                        set_name,
-                        [ photo['id'] for photo in getPhotosetAsOrderedList(photos_expected.values(), set_name) ],
-                    ],
-                }
-            )
 
         return operations
