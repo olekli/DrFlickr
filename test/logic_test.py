@@ -105,7 +105,9 @@ config_logic = {
           'published': 6
         },
         'publish': {
-          'published': 40
+          'published': 20,
+          'published10': 68,
+          'published15': 44
         },
         'ordering': {
           'photos_ordered': 24

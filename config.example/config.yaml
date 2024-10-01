@@ -22,7 +22,9 @@ logic:
       added_to_group: 1
       published: 6
     publish:
-      published: 40
+      published10: 68
+      published15: 40
+      published: 20
     ordering:
       photos_ordered: 24
 applicator:
