@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "drflickr"
-version = "0.1.4"
+version = "0.1.5"
 description = "Provides a daemon to automate certain tasks on Flickr"
 authors = ["Ole Kliemann <mail@olekliemann.de>"]
 
