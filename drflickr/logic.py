@@ -46,9 +46,9 @@ class Logic:
             if id not in photos_expected:
                 photos_expected[id] = json.loads(json.dumps(photos_actual[id]))
 
-        for id in photos_expected:
-            if id not in photos_actual:
-                del photos_expected[id]
+        to_delete = [id for id in photos_expected if id not in photos_actual]
+        for id in to_delete:
+            del photos_expected[id]
 
         for id in photos_expected:
             photos_expected[id]['tags'] = list(photos_actual[id]['tags'])
