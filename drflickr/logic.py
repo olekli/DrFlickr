@@ -52,6 +52,8 @@ class Logic:
 
         for id in photos_expected:
             photos_expected[id]['tags'] = list(photos_actual[id]['tags'])
+            photos_expected[id]['views'] = photos_actual[id]['views']
+            photos_expected[id]['faves'] = photos_actual[id]['faves']
             if not photos_expected[id]['is_public']:
                 photos_expected[id]['is_public'] = photos_actual[id]['is_public']
                 photos_expected[id]['sets'] = dict(photos_actual[id]['sets'])

@@ -78,7 +78,7 @@ config_logic = {
     'managed_album': 'All',
     'group_checker': {
         'stats': {
-            'required_tag': 'photography',
+            'required_tag': 'stats',
             'delay': 0
         },
         'tags': {
@@ -2649,3 +2649,65 @@ def test_case_21():
     assert len(result.greylist['publish']) == 0
     assert len(result.greylist['ordering']) == 0
     assert len(result.operations) == 0
+
+def test_case_22():
+    # Stats are updated correctly from actual
+    logic = make_logic(reorder=False)
+    now = time.time()
+    greylist = {}
+    photos_actual = {
+        'photo-1': {
+            'id': 'photo-1',
+            'title': 'Photo 1',
+            'date_posted': now - 12*24*60*60,
+            'date_taken' : now - 12*24*60*60,
+            'faves': 0,
+            'views': 0,
+            'groups': [
+            ],
+            'tags': [
+            ],
+            'sets': { 'All': 0 },
+            'is_public': True
+        },
+        'photo-2': {
+            'id': 'photo-2',
+            'title': 'Photo 2',
+            'date_posted': now - 11*24*60*60,
+            'date_taken' : now - 11*24*60*60,
+            'faves': 0,
+            'views': 0,
+            'groups': [
+            ],
+            'tags': [
+                'stats'
+            ],
+            'sets': { 'All': 2, 'Streets': 0 },
+            'is_public': True
+        },
+        'photo-3': {
+            'id': 'photo-3',
+            'title': 'Photo 3',
+            'date_posted': now - 13*24*60*60,
+            'date_taken' : now - 13*24*60*60,
+            'faves': 0,
+            'views': 0,
+            'groups': [
+            ],
+            'tags': [
+            ],
+            'sets': { 'All': 1 },
+            'is_public': True
+        }
+    }
+    result = logic(photos_actual, {}, greylist)
+    photos_expected = result.photos_expected
+    assert photos_expected == photos_actual
+    photos_actual['photo-2']['views'] = 153
+    photos_actual['photo-2']['faves'] = 22
+    result = logic(photos_actual, photos_expected, greylist)
+    assert len(result.photos_expected) == 3
+    assert len(result.photos_expected['photo-2']['groups']) == 2
+    assert 'views-100' in result.photos_expected['photo-2']['groups']
+    assert 'faves-20' in result.photos_expected['photo-2']['groups']
+    assert len(result.operations) == 2
