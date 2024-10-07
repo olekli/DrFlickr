@@ -12,7 +12,7 @@ pyyaml = "^6.0.2"
 python-daemon = "^3.0.1"
 
 mrjsonstore = "^0.4.1"
-drresult = "^0.2.1"
+drresult = "^0.4.3"
 [tool.poetry.group.dev.dependencies]
 pytest = "^8.3.3"
 

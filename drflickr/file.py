@@ -11,8 +11,10 @@ logger = logging.getLogger(__name__)
 
 
 @returns_result(
-    PermissionError,
-    NotADirectoryError,
+    expects=[
+        PermissionError,
+        NotADirectoryError,
+    ]
 )
 def mkdir(dirname):
     os.makedirs(dirname, exist_ok=True)
@@ -20,11 +22,13 @@ def mkdir(dirname):
 
 
 @returns_result(
-    FileNotFoundError,
-    PermissionError,
-    IsADirectoryError,
-    json.JSONDecodeError,
-    UnicodeDecodeError,
+    expects=[
+        FileNotFoundError,
+        PermissionError,
+        IsADirectoryError,
+        json.JSONDecodeError,
+        UnicodeDecodeError,
+    ]
 )
 def readJson(filename):
     with open(filename) as f:
@@ -32,11 +36,13 @@ def readJson(filename):
 
 
 @returns_result(
-    FileNotFoundError,
-    PermissionError,
-    IsADirectoryError,
-    json.JSONDecodeError,
-    UnicodeDecodeError,
+    expects=[
+        FileNotFoundError,
+        PermissionError,
+        IsADirectoryError,
+        json.JSONDecodeError,
+        UnicodeDecodeError,
+    ]
 )
 def writeJson(filename, content):
     with open(filename, 'w') as f:
@@ -45,11 +51,13 @@ def writeJson(filename, content):
 
 
 @returns_result(
-    FileNotFoundError,
-    PermissionError,
-    IsADirectoryError,
-    json.JSONDecodeError,
-    UnicodeDecodeError,
+    expects=[
+        FileNotFoundError,
+        PermissionError,
+        IsADirectoryError,
+        json.JSONDecodeError,
+        UnicodeDecodeError,
+    ]
 )
 def readYaml(filename):
     with open(filename) as f:
@@ -57,11 +65,13 @@ def readYaml(filename):
 
 
 @returns_result(
-    FileNotFoundError,
-    PermissionError,
-    IsADirectoryError,
-    json.JSONDecodeError,
-    UnicodeDecodeError,
+    expects=[
+        FileNotFoundError,
+        PermissionError,
+        IsADirectoryError,
+        json.JSONDecodeError,
+        UnicodeDecodeError,
+    ]
 )
 def writeYaml(filename, content):
     with open(filename, 'w') as f:
