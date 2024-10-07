@@ -31,3 +31,6 @@ applicator:
   greylist:
     max_attempts: 14
     timeout: 24
+  throttle:
+    min_ms: 2000
+    max_ms: 10000

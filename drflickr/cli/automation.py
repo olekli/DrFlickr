@@ -17,6 +17,7 @@ import time
 import logging
 import sys
 import os
+import random
 
 pidfile_path = '/tmp/flickr-daemon.pid'
 
@@ -76,8 +77,9 @@ def loop(interval, exit_flag, dry_run, config_path, run_path, creds_path):
         run(dry_run, config_path, run_path, creds_path)
 
         total_sleep = 0
-        logging.info(f'Sleeping for {interval} minutes...')
-        while total_sleep < interval * 60:
+        mod_interval = (interval * 0.5) + int(random.uniform(0, interval))
+        logging.info(f'Sleeping for {mod_interval} minutes...')
+        while total_sleep < mod_interval * 60:
             if exit_flag['flag']:
                 break
             time.sleep(1)

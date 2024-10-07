@@ -10,6 +10,7 @@ from collections import namedtuple
 import json
 import time
 import logging
+import random
 
 logger = logging.getLogger(__name__)
 
@@ -42,6 +43,13 @@ class Applicator:
                     result = getattr(self, op["method"])(*op["params"])
                     greylist.update(op, result)
                     applied.append(result.is_ok())
+                    time.sleep(
+                        random.uniform(
+                            self.config['throttle']['min_ms'],
+                            self.config['throttle']['max_ms'],
+                        )
+                        / 1000.0
+                    )
         return namedtuple("ApplicatorResult", ["result", "greylist"])(
             all(applied), greylist.to_dict()
         )
