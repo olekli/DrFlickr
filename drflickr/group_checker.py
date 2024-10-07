@@ -14,6 +14,7 @@ class GroupChecker:
         self.views_groups = views_groups
         self.favorites_groups = favorites_groups
         self.config = config
+        self.rng = random.Random(time.time())
 
     def __call__(self, photo, greylist):
         self.checkStatGroups(photo)
@@ -52,8 +53,7 @@ class GroupChecker:
                 if not greylist.has('group', group) and not group in photo['groups']
             ]
             logger.debug(f'eligible_groups: {eligible_groups}')
-            rng = random.Random(0)
-            rng.shuffle(eligible_groups)
+            self.rng.shuffle(eligible_groups)
             eligible_groups = eligible_groups[: self.config['tags']['group_add_limit']]
             photo['groups'] += eligible_groups
             if len(eligible_groups) > 0:
