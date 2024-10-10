@@ -4,6 +4,7 @@
 from drflickr.applicator_greylist import ApplicatorGreylist
 from drflickr.photoset import getPhotosetAsOrderedList
 from drflickr.api import ApiError, NetworkError
+from drflickr.group_info import GroupInfo
 
 from drresult import Ok, Err, returns_result
 from collections import namedtuple
@@ -28,7 +29,7 @@ class Applicator:
     def __init__(self, api, submissions, group_info, config):
         self.api = api
         self.submissions = submissions
-        self.group_info = group_info
+        self.group_info = GroupInfo(group_info)
         self.config = config
 
     def __call__(self, operations, photosets, greylist):
@@ -67,7 +68,7 @@ class Applicator:
                 if result.code == 3:
                     # already in pool
                     logger.info(
-                        f'{photo["title"]}: group {self.group_info.get(group_id)["name"]} has photo already in pool'
+                        f'{photo["title"]}: group {self.group_info.getName(group_id)} has photo already in pool'
                     )
                     self.submissions.add(photo, group_id)
                     return Ok(result)
@@ -79,25 +80,25 @@ class Applicator:
                 elif result.code == 5:
                     # photo limit
                     logger.info(
-                        f'group {self.group_info.get(group_id)["name"]} photo limit hit'
+                        f'group {self.group_info.getName(group_id)} photo limit hit'
                     )
-                    return Err(result)
+                    assert False, "Should not happen anymore"
                 elif (result.code == 6) or (result.code == 7):
                     # photo already in pending
                     # in case this entry was missed in submissions, add it now
                     logger.info(
-                        f'{photo["title"]}: group {self.group_info.get(group_id)["name"]} has photo in pending'
+                        f'{photo["title"]}: group {self.group_info.getName(group_id)} has photo in pending'
                     )
                     self.submissions.add(photo, group_id)
                     return Ok(result)
                 else:
                     logger.warning(
-                        f'adding {photo["title"]} to {self.group_info.get(group_id)["name"]}: {result}'
+                        f'adding {photo["title"]} to {self.group_info.getName(group_id)}: {result}'
                     )
                     return Err(result)
             else:
                 logger.warning(
-                    f'adding {photo["title"]} to {self.group_info.get(group_id)["name"]}: {result}'
+                    f'adding {photo["title"]} to {self.group_info.getName(group_id)}: {result}'
                 )
                 return Err(result)
         assert False

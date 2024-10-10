@@ -11,8 +11,8 @@ from drflickr.logic import Logic
 from drflickr.reconciler import Reconciler
 from drflickr.applicator import Applicator
 from drflickr.stats import Stats
-from drflickr.group_info import GroupInfo
 from drflickr.operations_review import OperationsReview
+from drflickr.group_info_updater import GroupInfoUpdater
 from mrjsonstore import JsonStore
 from drresult import Ok, Err, returns_result
 import yaml
@@ -37,7 +37,6 @@ class Runner:
         )
         self.tag_groups_filename = os.path.join(config_path, 'groups-tags.yaml')
         self.config_filename = os.path.join(config_path, 'config.yaml')
-        self.group_info_filename = os.path.join(run_path, 'group-info.yaml')
         self.submissions_filename = os.path.join(run_path, 'submissions.json')
         self.stats_filename = os.path.join(run_path, 'stats.json')
         self.state_store_filename = os.path.join(run_path, 'state_store.json')
@@ -58,6 +57,9 @@ class Runner:
         favorites_groups = readYaml(self.favorites_groups_filename).unwrap_or_return()
         tag_groups = readYaml(self.tag_groups_filename).unwrap_or_return()
         config = readYaml(self.config_filename).unwrap_or_return()
+        if self.dry_run:
+            config['applicator']['throttle']['min_ms'] = 0
+            config['applicator']['throttle']['max_ms'] = 1
 
         submissions = Submissions(self.submissions_filename, dry_run=self.dry_run)
         api = (
@@ -65,7 +67,6 @@ class Runner:
             .load()
             .unwrap_or_return()
         )
-        group_info = GroupInfo(self.group_info_filename, api)
         stats = Stats(api, self.stats_filename).load().unwrap_or_return()
 
         self.state_store = JsonStore(self.state_store_filename, dry_run=self.dry_run)
@@ -77,8 +78,22 @@ class Runner:
             config=config['logic'],
             stats=stats,
         )
-        self.applicator = Applicator(api, submissions, group_info, config['applicator'])
-        self.operations_review = OperationsReview(group_info)
+
+        all_groups = [
+            group
+            for groups in [
+                tag_groups[cat]['groups']
+                for cat in tag_groups.keys()
+            ]
+            for group in groups + [group['nsid'] for group in views_groups] + [group['nsid'] for group in favorites_groups]
+        ]
+        group_info_updater = GroupInfoUpdater(api)
+        with self.state_store.transaction() as state:
+            state.setdefault('group_info', {})
+            state['group_info'] = group_info_updater(state['group_info'], all_groups)
+
+        self.applicator = Applicator(api, submissions, self.state_store.view()['group_info'], config['applicator'])
+        self.operations_review = OperationsReview(self.state_store.view()['group_info'])
 
         return Ok(self)
 
@@ -88,15 +103,18 @@ class Runner:
         with self.state_store.transaction() as state:
             state.setdefault('photos_expected', {})
             state.setdefault('logic_greylist', {})
+            state.setdefault('group_info', {})
 
             logic_result = self.logic(
                 retriever_result.photos_actual,
                 state['photos_expected'],
                 state['logic_greylist'],
+                state['group_info'],
             )
 
             state['photos_expected'] = logic_result.photos_expected
             state['logic_greylist'] = logic_result.greylist
+            state['group_info'] = logic_result.group_info
         if self.dry_run:
             writeYaml(
                 'operations-review-full.yaml', logic_result.operations

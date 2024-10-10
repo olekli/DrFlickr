@@ -35,7 +35,7 @@ class Greylist:
 
     def has(self, type, id):
         if id in self.greylist[type]:
-            if time.time() > self.greylist[type][id]:
+            if time.time() >= self.greylist[type][id]:
                 del self.greylist[type][id]
             else:
                 logger.debug(f'{type} greylisted: {id}')

@@ -16,19 +16,24 @@ class GroupChecker:
         self.config = config
         self.rng = random.Random(time.time())
 
-    def __call__(self, photo, greylist):
+    def __call__(self, photo, greylist, group_info):
         self.checkStatGroups(photo)
-        self.checkTagGroups(photo, greylist)
+        self.checkTagGroups(photo, greylist, group_info)
 
-    def checkTagGroups(self, photo, greylist):
+    def checkTagGroups(self, photo, greylist, group_info):
         logger.info(f'Checking photo for groups {photo["title"]} {photo["id"]}')
         logger.debug(f'tag_groups: {self.tag_groups}')
+        target_categories = [
+            cat
+            for cat in self.tag_groups.keys()
+            if set(self.tag_groups[cat]['tags']).issubset(set(photo['tags']))
+        ]
+        logger.debug(f'target_categories: {target_categories}')
         target_groups = [
             group
             for groups in [
                 self.tag_groups[cat]['groups']
-                for cat in self.tag_groups.keys()
-                if set(self.tag_groups[cat]['tags']).issubset(set(photo['tags']))
+                for cat in target_categories
             ]
             for group in groups
         ]
@@ -47,19 +52,20 @@ class GroupChecker:
         ]
         logger.debug(f'photo["groups"] after purge: {photo["groups"]}')
         if not greylist.has('photo', photo['id']):
-            eligible_groups = [
-                group
-                for group in target_groups
-                if not greylist.has('group', group) and not group in photo['groups']
-            ]
-            logger.debug(f'eligible_groups: {eligible_groups}')
-            self.rng.shuffle(eligible_groups)
-            eligible_groups = eligible_groups[: self.config['tags']['group_add_limit']]
-            photo['groups'] += eligible_groups
-            if len(eligible_groups) > 0:
+            for cat in target_categories:
+                eligible_groups = [
+                    group
+                    for group in self.tag_groups[cat]['groups']
+                    if not greylist.has('group', group) and not group in photo['groups'] and not group_info.hasPhotoLimit(group)
+                ]
+                self.rng.shuffle(eligible_groups)
+                logger.debug(f'eligible_groups: {eligible_groups}')
                 for group in eligible_groups:
+                    photo['groups'] += [group]
                     greylist.add('group', group, 'photo_added')
-                greylist.add('photo', photo['id'], 'added_to_group')
+                    greylist.add('photo', photo['id'], 'added_to_group')
+                    group_info.reduceRemaining(group)
+                    break
 
     def checkStatGroups(self, photo):
         logger.info(f'Checking photo for stats {photo["title"]} {photo["id"]}')

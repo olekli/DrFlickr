@@ -2,6 +2,7 @@
 # SPDX-License-Identifier: Apache-2.0
 
 from drflickr.greylist import Greylist
+from drflickr.group_info import GroupInfo
 from drflickr.group_checker import GroupChecker
 from drflickr.publisher import Publisher
 from drflickr.reorderer import Reorderer
@@ -32,9 +33,10 @@ class Logic:
         self.reorderer = Reorderer(config['reorderer'])
         self.reconciler = Reconciler()
 
-    def __call__(self, photos_actual, photos_expected, greylist):
+    def __call__(self, photos_actual, photos_expected, greylist, group_info):
         photos_expected = json.loads(json.dumps(photos_expected))
         greylist = Greylist(json.loads(json.dumps(greylist)), self.config['greylist'])
+        group_info = GroupInfo(json.loads(json.dumps(group_info)))
 
         photos_actual = {
             id: photo
@@ -87,7 +89,7 @@ class Logic:
             if photo['is_public']
         }
         for photo in photos_expected_public.values():
-            self.group_checker(photo, greylist)
+            self.group_checker(photo, greylist, group_info)
         self.publisher(photos_expected.values(), greylist)
         if self.config['reorderer']['enabled'] and not greylist.has(
             'ordering', 'photos_ordered'
@@ -97,6 +99,6 @@ class Logic:
 
         operations = self.reconciler(photos_actual, photos_expected)
 
-        return namedtuple('LogicResult', ['photos_expected', 'greylist', 'operations'])(
-            photos_expected, greylist.greylist, operations
+        return namedtuple('LogicResult', ['photos_expected', 'greylist', 'group_info', 'operations'])(
+            photos_expected, greylist.greylist, group_info.group_info, operations
         )

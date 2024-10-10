@@ -1,27 +1,28 @@
 # Copyright 2024 Ole Kliemann
 # SPDX-License-Identifier: Apache-2.0
 
-from drresult import Ok, Err, returns_result
-from mrjsonstore import JsonStore
 import logging
+
+from drresult import noexcept
 
 logger = logging.getLogger(__name__)
 
 
 class GroupInfo:
-    def __init__(self, filename, api):
-        self.group_names = JsonStore(filename)
-        self.api = api
+    def __init__(self, group_info):
+        self.group_info = group_info
 
-    def get(self, group_id):
-        info = self.group_names.view().get(group_id, None)
-        if info:
-            return info
-        else:
-            with self.group_names() as group_names:
-                result = self.api.getGroupInfo(group_id)
-                if result.is_ok():
-                    group_names[group_id] = result.unwrap()
-                    return result.unwrap()
-                else:
-                    return {'name': group_id}
+    @noexcept()
+    def getName(self, group_id):
+        return self.group_info[group_id]['name']
+
+    @noexcept()
+    def hasPhotoLimit(self, group_id):
+        group = self.group_info[group_id]
+        return 'throttle' in group and 'remaining' in group['throttle'] and group['throttle']['remaining'] <= 0
+
+    @noexcept()
+    def reduceRemaining(self, group_id):
+        group = self.group_info[group_id]
+        if 'throttle' in group and 'remaining' in group['throttle']:
+            group['throttle']['remaining'] -= 1

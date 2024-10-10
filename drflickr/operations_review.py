@@ -4,10 +4,11 @@
 import re
 import json
 
+from drflickr.group_info import GroupInfo
 
 class OperationsReview:
     def __init__(self, group_info):
-        self.group_info = group_info
+        self.group_info = GroupInfo(group_info)
 
     def __call__(self, operations):
         return [self.flatten(op) for op in operations]
@@ -16,7 +17,7 @@ class OperationsReview:
         for index, item in enumerate(params):
             if isinstance(item, str):
                 if bool(re.fullmatch(r'^[0-9]*@N[0-9][0-9]$', item)):
-                    params[index] = f'{self.group_info.get(item)["name"]} {item}'
+                    params[index] = f'{self.group_info.getName(item)} {item}'
             elif isinstance(item, dict):
                 assert 'title' in item
                 params[index] = item['title']
