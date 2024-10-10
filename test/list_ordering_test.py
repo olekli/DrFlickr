@@ -18,12 +18,14 @@ test_data_getOutOfOrderIndices = [
     ([20, 50], [1]),
     ([40, 50, 20, 10], [1]),
     ([40, 50, 20, 0], [1]),
-    ([10, 60, 50, 40, 20, 30, 0], [0, 5])
+    ([10, 60, 50, 40, 20, 30, 0], [0, 5]),
 ]
+
 
 @pytest.mark.parametrize("input, expected", test_data_getOutOfOrderIndices)
 def test_getOutOfOrderIndices(input, expected):
     assert getOutOfOrderIndices(input) == expected
+
 
 test_data_orderPhotos = [
     ([]),
@@ -35,10 +37,11 @@ test_data_orderPhotos = [
     ([20, 60, 50, 40, 20, 30, 30]),
 ]
 
+
 @pytest.mark.parametrize("input", test_data_orderPhotos)
 def test_getOutOfOrderIndices(input):
     photos = [
-        { 'id': index, 'date_posted': date_posted }
+        {'id': index, 'date_posted': date_posted}
         for index, date_posted in enumerate(input)
     ]
     id_order_expected = [photo['id'] for photo in photos]

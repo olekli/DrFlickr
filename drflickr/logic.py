@@ -99,6 +99,6 @@ class Logic:
 
         operations = self.reconciler(photos_actual, photos_expected)
 
-        return namedtuple('LogicResult', ['photos_expected', 'greylist', 'group_info', 'operations'])(
-            photos_expected, greylist.greylist, group_info.group_info, operations
-        )
+        return namedtuple(
+            'LogicResult', ['photos_expected', 'greylist', 'group_info', 'operations']
+        )(photos_expected, greylist.greylist, group_info.group_info, operations)

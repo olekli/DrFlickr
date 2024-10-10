@@ -6,6 +6,7 @@ import json
 
 from drflickr.group_info import GroupInfo
 
+
 class OperationsReview:
     def __init__(self, group_info):
         self.group_info = GroupInfo(group_info)

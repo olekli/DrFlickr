@@ -31,10 +31,7 @@ class GroupChecker:
         logger.debug(f'target_categories: {target_categories}')
         target_groups = [
             group
-            for groups in [
-                self.tag_groups[cat]['groups']
-                for cat in target_categories
-            ]
+            for groups in [self.tag_groups[cat]['groups'] for cat in target_categories]
             for group in groups
         ]
         logger.debug(f'target_groups: {target_groups}')
@@ -56,7 +53,9 @@ class GroupChecker:
                 eligible_groups = [
                     group
                     for group in self.tag_groups[cat]['groups']
-                    if not greylist.has('group', group) and not group in photo['groups'] and not group_info.hasPhotoLimit(group)
+                    if not greylist.has('group', group)
+                    and not group in photo['groups']
+                    and not group_info.hasPhotoLimit(group)
                 ]
                 self.rng.shuffle(eligible_groups)
                 logger.debug(f'eligible_groups: {eligible_groups}')

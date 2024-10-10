@@ -19,7 +19,11 @@ class GroupInfo:
     @noexcept()
     def hasPhotoLimit(self, group_id):
         group = self.group_info[group_id]
-        return 'throttle' in group and 'remaining' in group['throttle'] and group['throttle']['remaining'] <= 0
+        return (
+            'throttle' in group
+            and 'remaining' in group['throttle']
+            and group['throttle']['remaining'] <= 0
+        )
 
     @noexcept()
     def reduceRemaining(self, group_id):

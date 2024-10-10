@@ -81,18 +81,22 @@ class Runner:
 
         all_groups = [
             group
-            for groups in [
-                tag_groups[cat]['groups']
-                for cat in tag_groups.keys()
-            ]
-            for group in groups + [group['nsid'] for group in views_groups] + [group['nsid'] for group in favorites_groups]
+            for groups in [tag_groups[cat]['groups'] for cat in tag_groups.keys()]
+            for group in groups
+            + [group['nsid'] for group in views_groups]
+            + [group['nsid'] for group in favorites_groups]
         ]
         group_info_updater = GroupInfoUpdater(api)
         with self.state_store.transaction() as state:
             state.setdefault('group_info', {})
             state['group_info'] = group_info_updater(state['group_info'], all_groups)
 
-        self.applicator = Applicator(api, submissions, self.state_store.view()['group_info'], config['applicator'])
+        self.applicator = Applicator(
+            api,
+            submissions,
+            self.state_store.view()['group_info'],
+            config['applicator'],
+        )
         self.operations_review = OperationsReview(self.state_store.view()['group_info'])
 
         return Ok(self)
