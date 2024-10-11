@@ -1,121 +1,1096 @@
-photography:
+2728886@N20:
+  id: 2728886@N20
+  tier: 3
   tags:
-    - photography
-  groups:
-    - 2728886@N20
-    - 903702@N21
-    - 43501458@N00
-    - 76535076@N00
-    - 2684497@N24
-    - 34427469792@N01
-    - 347276@N23
-    - 40732569271@N01
-    - 1136489@N22
-leica:
+    require:
+      - photography
+    match: []
+    exclude: []
+
+903702@N21:
+  id: 903702@N21
+  tier: 3
   tags:
-    - leica
-    - photography
-  groups:
-    - 32886227@N00
-    - 25024744@N00
-leicaq3:
+    require:
+      - photography
+
+43501458@N00:
+  id: 43501458@N00
+  tier: 3
   tags:
-    - leicaq3
-    - photography
-  groups:
-    - 14668181@N23
-leica_street:
+    require:
+      - photography
+
+76535076@N00:
+  id: 76535076@N00
+  tier: 3
   tags:
-    - leica
-    - streetphotography
-  groups:
-    - 673958@N20
-street:
+    require:
+      - photography
+
+2684497@N24:
+  id: 2684497@N24
+  tier: 2
   tags:
-    - streetphotography
-  groups:
-    - 2128344@N23
-    - 1287600@N22
-    - 1755253@N22
-    - 2280655@N23
-    - 783934@N25
-    - 860594@N21
-    - 1035536@N24
-    - 1194901@N25
-    - 2075599@N22
-    - 1369997@N21
-    - 2179059@N21
-    - 1714580@N21
-    - 49503026089@N01
-    - 2659495@N23
-    - 77501447@N00
-    - 355036@N23
-    - 2697196@N25
-    - 1278426@N24
-    - 81445012@N00
-    - 2036833@N24
-    - 972411@N22
-    - 20558842@N00
-    - 579020@N23
-monochrome:
+    require:
+      - photography
+
+34427469792@N01:
+  id: 34427469792@N01
+  tier: 3
   tags:
-    - monochrome
-    - photography
-  groups:
-    - 714537@N25
-    - 52239733174@N01
-    - 838172@N24
-    - 49288355@N00
-    - 1225972@N20
-    - 61859776@N00
-    - 91479755@N00
-    - 1816536@N23
-    - 66351550@N00
-    - 497397@N20
-    - 1389174@N21
-    - 1620026@N20
-    - 2403391@N20
-    - 13359922@N00
-    - 405546@N20
-monochrome_:
+    require:
+      - photography
+
+347276@N23:
+  id: 347276@N23
+  tier: 4
   tags:
-    - monochrome
-  groups:
-    - 16978849@N00
-street_monochrome:
+    require:
+      - photography
+
+40732569271@N01:
+  id: 40732569271@N01
+  tier: 4
   tags:
-    - monochrome
-    - streetphotography
-  groups:
-    - 2672227@N23
-    - 2583438@N21
-    - 1046180@N24
-street_color:
+    require:
+      - photography
+
+1136489@N22:
+  id: 1136489@N22
+  tier: 4
   tags:
-    - color
-    - streetphotography
-  groups:
-    - 1236607@N20
-street_people:
+    require:
+      - photography
+
+32886227@N00:
+  id: 32886227@N00
+  tier: 3
   tags:
-    - people
-    - streetphotography
-  groups:
-    - 1985435@N21
-    - 71456407@N00
-    - 10557720@N00
-    - 1287879@N21
-    - 66447238@N00
-night:
+    require:
+      - leicaq3
+
+25024744@N00:
+  id: 25024744@N00
+  tier: 2
   tags:
-    - nightphotography
-  groups:
-    - 734362@N21
-    - 66429327@N00
-    - 82036771@N00
-    - 11947580@N00
-    - 83812269@N00
-    - 66063005@N00
-    - 17961503@N00
-    - 35489622@N00
-   - 60333953@N00
+    require:
+      - leicaq3
+
+14668181@N23:
+  id: 14668181@N23
+  tier: 3
+  tags:
+    require:
+      - leicaq3
+
+673958@N20:
+  id: 673958@N20
+  tier: 2
+  tags:
+    require:
+      - leicaq3
+      - streetphotography
+
+
+2128344@N23:
+  id: 2128344@N23
+  tier: 3
+  tags:
+    require:
+      - streetphotography
+
+1287600@N22:
+  id: 1287600@N22
+  tier: 3
+  tags:
+    require:
+      - streetphotography
+
+1755253@N22:
+  id: 1755253@N22
+  tier: 2
+  tags:
+    require:
+      - streetphotography
+
+2280655@N23:
+  id: 2280655@N23
+  tier: 3
+  tags:
+    require:
+      - streetphotography
+
+783934@N25:
+  id: 783934@N25
+  tier: 4
+  tags:
+    require:
+      - streetphotography
+
+860594@N21:
+  id: 860594@N21
+  tier: 3
+  tags:
+    require:
+      - streetphotography
+      - people
+
+1035536@N24:
+  id: 1035536@N24
+  tier: 3
+  tags:
+    require:
+      - streetphotography
+      - people
+
+1194901@N25:
+  id: 1194901@N25
+  tier: 3
+  tags:
+    require:
+      - streetphotography
+      - people
+
+2075599@N22:
+  id: 2075599@N22
+  tier: 3
+  tags:
+    require:
+      - streetphotography
+
+1369997@N21:
+  id: 1369997@N21
+  tier: 2
+  tags:
+    require:
+      - streetphotography
+      - people
+      - street
+    match:
+      - raw
+
+2179059@N21:
+  id: 2179059@N21
+  tier: 2
+  tags:
+    require:
+      - streetphotography
+
+1714580@N21:
+  id: 1714580@N21
+  tier: 4
+  tags:
+    require:
+      - streetphotography
+
+
+49503026089@N01:
+  id: 49503026089@N01
+  tier: 3
+  tags:
+    require:
+      - streetphotography
+      - street
+      - people
+
+77501447@N00:
+  id: 77501447@N00
+  tier: 2
+  tags:
+    require:
+      - streetphotography
+      - people
+
+355036@N23:
+  id: 355036@N23
+  tier: 2
+  tags:
+    require:
+      - streetphotography
+      - people
+    match:
+      - raw
+
+2697196@N25:
+  id: 2697196@N25
+  tier: 3
+  tags:
+    require:
+      - streetphotography
+
+1278426@N24:
+  id: 1278426@N24
+  tier: 3
+  tags:
+    require:
+      - streetphotography
+
+81445012@N00:
+  id: 81445012@N00
+  tier: 2
+  tags:
+    require:
+      - streetphotography
+      - aesthetic
+
+2036833@N24:
+  id: 2036833@N24
+  tier: 3
+  tags:
+    require:
+      - streetphotography
+
+972411@N22:
+  id: 972411@N22
+  tier: 4
+  tags:
+    require:
+      - streetphotography
+
+20558842@N00:
+  id: 20558842@N00
+  tier: 2
+  tags:
+    require:
+      - streetphotography
+    match:
+      - radical
+      - aesthetic
+
+579020@N23:
+  id: 579020@N23
+  tier: 3
+  tags:
+    require:
+      - streetphotography
+
+1226931@N25:
+  id: 1226931@N25
+  tier: 3
+  tags:
+    require:
+      - streetphotography
+
+1613689@N23:
+  id: 1613689@N23
+  tier: 3
+  tags:
+    require:
+      - streetphotography
+
+
+714537@N25:
+  id: 714537@N25
+  tier: 4
+  tags:
+    require:
+      - monochrome
+
+52239733174@N01:
+  id: 52239733174@N01
+  tier: 2
+  tags:
+    require:
+      - monochrome
+
+838172@N24:
+  id: 838172@N24
+  tier: 2
+  tags:
+    require:
+      - monochrome
+
+49288355@N00:
+  id: 49288355@N00
+  tier: 3
+  tags:
+    require:
+      - monochrome
+
+1225972@N20:
+  id: 1225972@N20
+  tier: 2
+  tags:
+    require:
+      - monochrome
+
+61859776@N00:
+  id: 61859776@N00
+  tier: 3
+  tags:
+    require:
+      - monochrome
+
+91479755@N00:
+  id: 91479755@N00
+  tier: 3
+  tags:
+    require:
+      - monochrome
+
+1816536@N23:
+  id: 1816536@N23
+  tier: 3
+  tags:
+    require:
+      - monochrome
+
+66351550@N00:
+  id: 66351550@N00
+  tier: 3
+  tags:
+    require:
+      - monochrome
+
+497397@N20:
+  id: 497397@N20
+  tier: 2
+  tags:
+    require:
+      - monochrome
+    exclude:
+      - smoke
+
+1389174@N21:
+  id: 1389174@N21
+  tier: 2
+  tags:
+    require:
+      - monochrome
+
+1620026@N20:
+  id: 1620026@N20
+  tier: 2
+  tags:
+    require:
+      - monochrome
+
+2403391@N20:
+  id: 2403391@N20
+  tier: 3
+  tags:
+    require:
+      - monochrome
+
+13359922@N00:
+  id: 13359922@N00
+  tier: 3
+  tags:
+    require:
+      - monochrome
+
+405546@N20:
+  id: 405546@N20
+  tier: 4
+  tags:
+    require:
+      - monochrome
+
+16978849@N00:
+  id: 16978849@N00
+  tier: 2
+  tags:
+    require:
+      - monochrome
+
+2672227@N23:
+  id: 2672227@N23
+  tier: 2
+  tags:
+    require:
+      - monochrome
+      - streetphotography
+
+2583438@N21:
+  id: 2583438@N21
+  tier: 3
+  tags:
+    require:
+      - monochrome
+      - streetphotography
+
+1046180@N24:
+  id: 1046180@N24
+  tier: 2
+  tags:
+    require:
+      - monochrome
+
+1236607@N20:
+  id: 1236607@N20
+  tier: 3
+  tags:
+    require:
+      - streetphotography
+      - color
+
+1985435@N21:
+  id: 1985435@N21
+  tier: 1
+  tags:
+    require:
+      - streetphotography
+      - people
+      - street
+      - curated
+
+71456407@N00:
+  id: 71456407@N00
+  tier: 2
+  tags:
+    require:
+      - streetphotography
+      - people
+
+10557720@N00:
+  id: 10557720@N00
+  tier: 3
+  tags:
+    require:
+      - streetphotography
+      - people
+
+1287879@N21:
+  id: 1287879@N21
+  tier: 3
+  tags:
+    require:
+      - streetphotography
+      - people
+
+66447238@N00:
+  id: 66447238@N00
+  tier: 3
+  tags:
+    require:
+      - streetphotography
+      - people
+
+52447432@N00:
+  id: 52447432@N00
+  tier: 3
+  tags:
+    require:
+      - contrast
+
+39219337@N00:
+  id: 39219337@N00
+  tier: 3
+  tags:
+    require:
+      - contrast
+
+319155@N20:
+  id: 319155@N20
+  tier: 1
+  tags:
+    require:
+      - streetphotography
+      - curated
+      - people
+
+94761711@N00:
+  id: 94761711@N00
+  tier: 1
+  tags:
+    require:
+      - streetphotography
+      - curated
+      - people
+
+2125010@N22:
+  id: 2125010@N22
+  tier: 1
+  tags:
+    require:
+      - streetphotography
+      - curated
+      - people
+
+2227546@N20:
+  id: 2227546@N20
+  tier: 1
+  tags:
+    require:
+      - streetphotography
+      - curated
+      - people
+
+2019080@N21:
+  id: 2019080@N21
+  tier: 1
+  tags:
+    require:
+      - streetphotography
+      - curated
+      - people
+      - color
+
+15252600@N00:
+  id: 15252600@N00
+  tier: 1
+  tags:
+    require:
+      - streetphotography
+      - curated
+      - people
+      - decisivemoment
+
+
+32002189@N00:
+  id: 32002189@N00
+  tier: 3
+  tags:
+    require:
+      - surreal
+
+38318616@N00:
+  id: 38318616@N00
+  tier: 3
+  tags:
+    require:
+      - surreal
+
+60333953@N00:
+  id: 60333953@N00
+  tier: 2
+  tags:
+    require:
+      - surreal
+
+1141517@N22:
+  id: 1141517@N22
+  tier: 1
+  tags:
+    require:
+      - streetphotography
+      - radical
+
+53237974@N00:
+  id: 53237974@N00
+  tier: 3
+  tags:
+    require:
+      - noise
+
+1060475@N24:
+  id: 1060475@N24
+  tier: 3
+  tags:
+    require:
+      - noise
+
+1601096@N23:
+  id: 1601096@N23
+  tier: 3
+  tags:
+    require:
+      - noise
+
+1269411@N25:
+  id: 1269411@N25
+  tier: 4
+  tags:
+    require:
+      - silhouette
+
+23413287@N00:
+  id: 23413287@N00
+  tier: 3
+  tags:
+    require:
+      - silhouette
+
+48111895@N00:
+  id: 48111895@N00
+  tier: 2
+  tags:
+    require:
+      - silhouette
+
+57886706@N00:
+  id: 57886706@N00
+  tier: 3
+  tags:
+    require:
+      - silhouette
+
+82124140@N00:
+  id: 82124140@N00
+  tier: 3
+  tags:
+    require:
+      - silhouette
+
+779990@N21:
+  id: 779990@N21
+  tier: 4
+  tags:
+    require:
+      - silhouette
+
+24101322@N00:
+  id: 24101322@N00
+  tier: 3
+  tags:
+    require:
+      - silhouette
+
+95453177@N00:
+  id: 95453177@N00
+  tier: 3
+  tags:
+    require:
+      - silhouette
+      - people
+
+1910075@N23:
+  id: 1910075@N23
+  tier: 1
+  tags:
+    require:
+      - monochrome
+      - reflection
+
+52240405789@N01:
+  id: 52240405789@N01
+  tier: 3
+  tags:
+    require:
+      - reflection
+
+81682017@N00:
+  id: 81682017@N00
+  tier: 2
+  tags:
+    require:
+      - beach
+
+24303550@N00:
+  id: 24303550@N00
+  tier: 2
+  tags:
+    require:
+      - nature
+    exclude:
+      - people
+      - urban
+      - street
+      - human
+
+91806330@N00:
+  id: 91806330@N00
+  tier: 4
+  tags:
+    require:
+      - nature
+    exclude:
+      - people
+      - urban
+      - street
+      - human
+
+929911@N23:
+  id: 929911@N23
+  tier: 2
+  tags:
+    require:
+      - nature
+    exclude:
+      - people
+      - urban
+      - street
+      - human
+
+40969270@N00:
+  id: 40969270@N00
+  tier: 3
+  tags:
+    require:
+      - nature
+    exclude:
+      - people
+      - urban
+      - street
+      - human
+
+11611663@N00:
+  id: 11611663@N00
+  tier: 3
+  tags:
+    require:
+      - nature
+    exclude:
+      - urban
+      - street
+
+58898522@N00:
+  id: 58898522@N00
+  tier: 1
+  tags:
+    require:
+      - artistic
+
+375216@N23:
+  id: 375216@N23
+  tier: 1
+  tags:
+    require:
+      - landscape
+    exclude:
+      - urban
+      - street
+      - people
+      - human
+
+2297498@N20:
+  id: 2297498@N20
+  tier: 2
+  tags:
+    require:
+      - landscape
+    exclude:
+      - urban
+      - street
+      - people
+      - human
+
+23854677@N00:
+  id: 23854677@N00
+  tier: 2
+  tags:
+    require:
+      - landscape
+    exclude:
+      - urban
+      - street
+      - people
+      - human
+
+13197975@N00:
+  id: 13197975@N00
+  tier: 4
+  tags:
+    require:
+      - landscape
+    exclude:
+      - urban
+      - street
+
+1003995@N21:
+  id: 1003995@N21
+  tier: 4
+  tags:
+    require:
+      - landscape
+    exclude:
+      - urban
+      - street
+
+535727@N21:
+  id: 535727@N21
+  tier: 3
+  tags:
+    require:
+      - landscape
+
+78249294@N00:
+  id: 78249294@N00
+  tier: 4
+  tags:
+    require:
+      - landscape
+    exclude:
+      - urban
+      - street
+      - people
+      - human
+
+82124140@N00:
+  id: 82124140@N00
+  tier: 3
+  tags:
+    require:
+      - shadow
+
+26656994@N00:
+  id: 26656994@N00
+  tier: 3
+  tags:
+    require:
+      - shadow
+
+712151@N23:
+  id: 712151@N23
+  tier: 3
+  tags:
+    require:
+      - urban
+
+14049426@N00:
+  id: 14049426@N00
+  tier: 3
+  tags:
+    require:
+      - urban
+
+26328425@N00:
+  id: 26328425@N00
+  tier: 1
+  tags:
+    require:
+      - urban
+
+
+
+
+
+21075569@N00:
+  id: 21075569@N00
+  tier: 3
+  tags:
+    require:
+      - architecture
+
+1468642@N24:
+  id: 1468642@N24
+  tier: 3
+  tags:
+    require:
+      - architecture
+
+59207179@N00:
+  id: 59207179@N00
+  tier: 3
+  tags:
+    require:
+      - architecture
+
+65489562@N00:
+  id: 65489562@N00
+  tier: 3
+  tags:
+    require:
+      - architecture
+
+2702002@N24:
+  id: 2702002@N24
+  tier: 3
+  tags:
+    require:
+      - architecture
+
+46353124@N00:
+  id: 46353124@N00
+  tier: 3
+  tags:
+    require:
+      - architecture
+
+15977859@N00:
+  id: 15977859@N00
+  tier: 3
+  tags:
+    require:
+      - architecture
+
+25358885@N00:
+  id: 25358885@N00
+  tier: 3
+  tags:
+    require:
+      - architecture
+
+25938750@N00:
+  id: 25938750@N00
+  tier: 3
+  tags:
+    require:
+      - architecture
+
+17482990@N00:
+  id: 17482990@N00
+  tier: 3
+  tags:
+    require:
+      - architecture
+
+393171@N21:
+  id: 393171@N21
+  tier: 3
+  tags:
+    require:
+      - architecture
+
+387770@N21:
+  id: 387770@N21
+  tier: 3
+  tags:
+    require:
+      - urban
+      - bird
+
+19993514@N00:
+  id: 19993514@N00
+  tier: 3
+  tags:
+    require:
+      - urban
+      - bird
+
+2527008@N23:
+  id: 2527008@N23
+  tier: 3
+  tags:
+    require:
+      - urban
+      - bird
+
+14846425@N21:
+  id: 14846425@N21
+  tier: 3
+  tags:
+    require:
+      - urban
+      - bird
+
+954741@N23:
+  id: 954741@N23
+  tier: 3
+  tags:
+    require:
+      - liminality
+
+60333953@N00:
+  id: 60333953@N00
+  tier: 3
+  tags:
+    require:
+      - liminality
+
+97458538@N00:
+  id: 97458538@N00
+  tier: 3
+  tags:
+    require:
+      - liminality
+
+1244708@N21:
+  id: 1244708@N21
+  tier: 3
+  tags:
+    require:
+      - liminality
+
+983115@N24:
+  id: 983115@N24
+  tier: 3
+  tags:
+    require:
+      - liminality
+
+981923@N20:
+  id: 981923@N20
+  tier: 3
+  tags:
+    require:
+      - liminality
+
+33476724@N00:
+  id: 33476724@N00
+  tier: 3
+  tags:
+    require:
+      - liminality
+
+1894322@N20:
+  id: 1894322@N20
+  tier: 3
+  tags:
+    require:
+      - liminality
+
+64788317@N00:
+  id: 64788317@N00
+  tier: 3
+  tags:
+    require:
+      - liminality
+
+38032420@N00:
+  id: 38032420@N00
+  tier: 3
+  tags:
+    require:
+      - liminality
+
+1008880@N23:
+  id: 1008880@N23
+  tier: 3
+  tags:
+    require:
+      - liminality
+
+42273919@N00:
+  id: 42273919@N00
+  tier: 3
+  tags:
+    require:
+      - liminality
+
+734362@N21:
+  id: 734362@N21
+  tier: 3
+  tags:
+    require:
+      - nightphotography
+
+66429327@N00:
+  id: 66429327@N00
+  tier: 3
+  tags:
+    require:
+      - nightphotography
+
+82036771@N00:
+  id: 82036771@N00
+  tier: 3
+  tags:
+    require:
+      - nightphotography
+
+11947580@N00:
+  id: 11947580@N00
+  tier: 3
+  tags:
+    require:
+      - nightphotography
+
+83812269@N00:
+  id: 83812269@N00
+  tier: 3
+  tags:
+    require:
+      - nightphotography
+
+66063005@N00:
+  id: 66063005@N00
+  tier: 3
+  tags:
+    require:
+      - nightphotography
+
+17961503@N00:
+  id: 17961503@N00
+  tier: 3
+  tags:
+    require:
+      - nightphotography
+
+35489622@N00:
+  id: 35489622@N00
+  tier: 3
+  tags:
+    require:
+      - nightphotography

@@ -50,22 +50,27 @@ def signal_handler(signum, frame, exit_flag):
 
 
 def run(dry_run, config_path, run_path, creds_path):
-    try:
-        runner = (
-            Runner(
-                config_path=config_path,
-                run_path=run_path,
-                creds_path=creds_path,
-                dry_run=dry_run,
+    runner = Runner(
+        config_path=config_path,
+        run_path=run_path,
+        creds_path=creds_path,
+        dry_run=dry_run,
+    ).load()
+    if runner:
+        runner = runner.unwrap()
+        result = runner()
+        if result:
+            logging.info(f'Runner succeeded. Fully reconciled: {result.unwrap()}')
+        else:
+            logging.critical(
+                f'Runner failed: {"".join(traceback.format_exception(result.unwrap_err()))}'
             )
-            .load()
-            .unwrap()
+        return result
+    else:
+        logging.critical(
+            f'Cannot load runner: {"".join(traceback.format_exception(runner.unwrap_err()))}'
         )
-        result = runner().unwrap()
-    except Exception as e:
-        logging.critical(f'Runner failed: {traceback.format_exc()}')
-        raise
-    logging.info(f'Runner succeeded. Fully reconciled: {result}')
+        return runner
 
 
 def loop(interval, exit_flag, dry_run, config_path, run_path, creds_path):
@@ -74,7 +79,9 @@ def loop(interval, exit_flag, dry_run, config_path, run_path, creds_path):
     signal.signal(signal.SIGINT, lambda s, f: signal_handler(s, f, exit_flag))
 
     while not exit_flag['flag']:
-        run(dry_run, config_path, run_path, creds_path)
+        result = run(dry_run, config_path, run_path, creds_path)
+        if not result:
+            break
 
         total_sleep = 0
         mod_interval = (interval * 0.5) + int(random.uniform(0, interval))

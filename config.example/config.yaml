@@ -5,7 +5,8 @@ logic:
       required_tag: photography
       delay: 120
     tags:
-      group_add_limit: 1
+      initial_burst: 3
+      switch_phase: 10
   publisher:
     queue_album: Queue
     showcase_album: Showcase

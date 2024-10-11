@@ -9,27 +9,89 @@ import time
 import json
 
 tag_groups = {
-    'photography': {'tags': ['photography'], 'groups': ['group-1', 'group-2']},
-    'streetphotography': {
-        'tags': ['streetphotography'],
-        'groups': ['street-group-1', 'street-group-2', 'street-group-3'],
+    'group-1': {'id': 'group-1', 'tier': 2, 'tags': {'require': ['photography']}},
+    'group-2': {'id': 'group-1', 'tier': 2, 'tags': {'require': ['photography']}},
+    'street-group-1': {
+        'id': 'street-group-1',
+        'tier': 2,
+        'tags': {'require': ['streetphotography']},
     },
-    'streetphotography_monochrome': {
-        'tags': ['street', 'monochrome'],
-        'groups': ['mono-group-1', 'mono-group-2', 'mono-group-3'],
+    'street-group-2': {
+        'id': 'street-group-2',
+        'tier': 2,
+        'tags': {'require': ['streetphotography'], 'exclude': ['excluded']},
+    },
+    'street-group-3': {
+        'id': 'street-group-3',
+        'tier': 2,
+        'tags': {'require': ['streetphotography']},
+    },
+    'mono-group-1': {
+        'id': 'mono-group-1',
+        'tier': 2,
+        'tags': {
+            'require': [
+                'streetphotography',
+                'monochrome',
+            ]
+        },
+    },
+    'mono-group-2': {
+        'id': 'mono-group-2',
+        'tier': 2,
+        'tags': {
+            'require': [
+                'streetphotography',
+                'monochrome',
+            ]
+        },
+    },
+    'mono-group-3': {
+        'id': 'mono-group-3',
+        'tier': 2,
+        'tags': {
+            'require': [
+                'streetphotography',
+                'monochrome',
+            ]
+        },
     },
 }
 
 group_info = {
-    'mono-group-1': {'name': 'mono-group-1'},
-    'mono-group-2': {'name': 'mono-group-2'},
-    'mono-group-3': {'name': 'mono-group-3'},
-    'street-group-1': {'name': 'street-group-1'},
-    'street-group-2': {'name': 'street-group-2'},
-    'street-group-3': {'name': 'street-group-3'},
-    'group-1': {'name': 'group-1'},
-    'group-2': {'name': 'group-2'},
-    'group-3': {'name': 'group-3'},
+    'mono-group-1': {
+        'name': 'mono-group-1',
+        'ispoolmoderated': False,
+        'invitation_only': False,
+    },
+    'mono-group-2': {
+        'name': 'mono-group-2',
+        'ispoolmoderated': False,
+        'invitation_only': False,
+    },
+    'mono-group-3': {
+        'name': 'mono-group-3',
+        'ispoolmoderated': False,
+        'invitation_only': False,
+    },
+    'street-group-1': {
+        'name': 'street-group-1',
+        'ispoolmoderated': False,
+        'invitation_only': False,
+    },
+    'street-group-2': {
+        'name': 'street-group-2',
+        'ispoolmoderated': False,
+        'invitation_only': False,
+    },
+    'street-group-3': {
+        'name': 'street-group-3',
+        'ispoolmoderated': False,
+        'invitation_only': False,
+    },
+    'group-1': {'name': 'group-1', 'ispoolmoderated': False, 'invitation_only': False},
+    'group-2': {'name': 'group-2', 'ispoolmoderated': False, 'invitation_only': False},
+    'group-3': {'name': 'group-3', 'ispoolmoderated': False, 'invitation_only': False},
 }
 
 view_groups = [
@@ -56,7 +118,7 @@ greylist_config_disabled = {
 
 group_checker_config = {
     'stats': {'required_tag': 'stat-groups', 'delay': 0},
-    'tags': {'group_add_limit': 1},
+    'tags': {'initial_burst': 1, 'switch_phase': 10},
 }
 
 
@@ -84,6 +146,322 @@ def test_does_add_legit_tag_groups():
         [
             'street-group-1' in photo['groups'],
             'street-group-2' in photo['groups'],
+            'street-group-3' in photo['groups'],
+        ]
+    )
+
+
+def test_does_add_legit_tag_groups_in_initial_burst():
+    now = time.time()
+    photo = {
+        'id': 'photo-1',
+        'title': 'Photo 1',
+        'date_posted': now - 1 * 24 * 60 * 60,
+        'date_taken': now - 1 * 24 * 60 * 60,
+        'faves': 0,
+        'views': 0,
+        'groups': [],
+        'tags': ['streetphotography'],
+        'sets': {},
+        'is_public': True,
+    }
+    greylist = Greylist({}, greylist_config)
+    group_checker_config_ = json.loads(json.dumps(group_checker_config))
+    group_checker_config_['tags']['initial_burst'] = 2
+    group_checker = GroupChecker(
+        tag_groups, view_groups, favorites_groups, group_checker_config_
+    )
+    group_checker(photo, greylist, GroupInfo(group_info))
+    assert len(photo['groups']) == 2
+    assert any(
+        [
+            'street-group-1' in photo['groups'] or 'street-group-2' in photo['groups'],
+            'street-group-1' in photo['groups'] or 'street-group-3' in photo['groups'],
+            'street-group-2' in photo['groups'] or 'street-group-3' in photo['groups'],
+        ]
+    )
+
+
+def test_does_add_legit_tag_groups_after_initial_burst():
+    now = time.time()
+    photo = {
+        'id': 'photo-1',
+        'title': 'Photo 1',
+        'date_posted': now - 1 * 24 * 60 * 60,
+        'date_taken': now - 1 * 24 * 60 * 60,
+        'faves': 0,
+        'views': 0,
+        'groups': ['street-group-1', 'street-group-3'],
+        'tags': ['streetphotography'],
+        'sets': {},
+        'is_public': True,
+    }
+    greylist = Greylist({}, greylist_config)
+    group_checker_config_ = json.loads(json.dumps(group_checker_config))
+    group_checker_config_['tags']['initial_burst'] = 2
+    group_checker_config_['tags']['switch_phase'] = 3
+    group_checker = GroupChecker(
+        tag_groups, view_groups, favorites_groups, group_checker_config_
+    )
+    group_checker(photo, greylist, GroupInfo(group_info))
+    assert len(photo['groups']) == 3
+    assert all(
+        [
+            'street-group-1' in photo['groups'],
+            'street-group-2' in photo['groups'],
+            'street-group-3' in photo['groups'],
+        ]
+    )
+
+
+def test_does_add_legit_tag_groups_in_dump_phase():
+    now = time.time()
+    photo = {
+        'id': 'photo-1',
+        'title': 'Photo 1',
+        'date_posted': now - 1 * 24 * 60 * 60,
+        'date_taken': now - 1 * 24 * 60 * 60,
+        'faves': 0,
+        'views': 0,
+        'groups': ['street-group-1', 'street-group-3'],
+        'tags': ['streetphotography'],
+        'sets': {},
+        'is_public': True,
+    }
+    greylist = Greylist({}, greylist_config)
+    group_checker_config_ = json.loads(json.dumps(group_checker_config))
+    group_checker_config_['tags']['initial_burst'] = 2
+    group_checker_config_['tags']['switch_phase'] = 2
+    tag_groups_ = json.loads(json.dumps(tag_groups))
+    tag_groups_['street-group-2']['tier'] = 3
+    group_checker = GroupChecker(
+        tag_groups_, view_groups, favorites_groups, group_checker_config_
+    )
+    group_checker(photo, greylist, GroupInfo(group_info))
+    assert len(photo['groups']) == 3
+    assert all(
+        [
+            'street-group-1' in photo['groups'],
+            'street-group-2' in photo['groups'],
+            'street-group-3' in photo['groups'],
+        ]
+    )
+
+
+def test_does_not_add_legit_higher_tier_tag_groups_in_dump_phase():
+    now = time.time()
+    photo = {
+        'id': 'photo-1',
+        'title': 'Photo 1',
+        'date_posted': now - 1 * 24 * 60 * 60,
+        'date_taken': now - 1 * 24 * 60 * 60,
+        'faves': 0,
+        'views': 0,
+        'groups': ['street-group-1', 'street-group-3'],
+        'tags': ['streetphotography'],
+        'sets': {},
+        'is_public': True,
+    }
+    greylist = Greylist({}, greylist_config)
+    group_checker_config_ = json.loads(json.dumps(group_checker_config))
+    group_checker_config_['tags']['initial_burst'] = 2
+    group_checker_config_['tags']['switch_phase'] = 2
+    tag_groups_ = json.loads(json.dumps(tag_groups))
+    tag_groups_['street-group-2']['tier'] = 2
+    group_checker = GroupChecker(
+        tag_groups_, view_groups, favorites_groups, group_checker_config_
+    )
+    group_checker(photo, greylist, GroupInfo(group_info))
+    assert len(photo['groups']) == 2
+    assert all(
+        [
+            'street-group-1' in photo['groups'],
+            'street-group-3' in photo['groups'],
+        ]
+    )
+
+
+def test_does_add_legit_and_restricted_tag_groups_after_initial_burst():
+    now = time.time()
+    photo = {
+        'id': 'photo-1',
+        'title': 'Photo 1',
+        'date_posted': now - 1 * 24 * 60 * 60,
+        'date_taken': now - 1 * 24 * 60 * 60,
+        'faves': 0,
+        'views': 0,
+        'groups': ['street-group-1', 'street-group-3'],
+        'tags': ['streetphotography'],
+        'sets': {},
+        'is_public': True,
+    }
+    greylist = Greylist({}, greylist_config)
+    group_checker_config_ = json.loads(json.dumps(group_checker_config))
+    group_checker_config_['tags']['initial_burst'] = 2
+    group_checker_config_['tags']['switch_phase'] = 3
+    group_checker = GroupChecker(
+        tag_groups, view_groups, favorites_groups, group_checker_config_
+    )
+    group_info_ = json.loads(json.dumps(group_info))
+    group_info_['street-group-2']['ispoolmoderated'] = True
+    group_checker(photo, greylist, GroupInfo(group_info_))
+    assert len(photo['groups']) == 3
+    assert all(
+        [
+            'street-group-1' in photo['groups'],
+            'street-group-2' in photo['groups'],
+            'street-group-3' in photo['groups'],
+        ]
+    )
+
+
+def test_does_not_add_excluded_tag_groups_after_initial_burst():
+    now = time.time()
+    photo = {
+        'id': 'photo-1',
+        'title': 'Photo 1',
+        'date_posted': now - 1 * 24 * 60 * 60,
+        'date_taken': now - 1 * 24 * 60 * 60,
+        'faves': 0,
+        'views': 0,
+        'groups': ['street-group-1', 'street-group-3'],
+        'tags': ['streetphotography', 'excluded'],
+        'sets': {},
+        'is_public': True,
+    }
+    greylist = Greylist({}, greylist_config)
+    group_checker_config_ = json.loads(json.dumps(group_checker_config))
+    group_checker_config_['tags']['initial_burst'] = 2
+    group_checker_config_['tags']['switch_phase'] = 3
+    group_checker = GroupChecker(
+        tag_groups, view_groups, favorites_groups, group_checker_config_
+    )
+    group_checker(photo, greylist, GroupInfo(group_info))
+    assert len(photo['groups']) == 2
+    assert all(
+        [
+            'street-group-1' in photo['groups'],
+            'street-group-3' in photo['groups'],
+        ]
+    )
+
+
+def test_does_not_add_excluded_tag_groups_in_initial_burst():
+    now = time.time()
+    photo = {
+        'id': 'photo-1',
+        'title': 'Photo 1',
+        'date_posted': now - 1 * 24 * 60 * 60,
+        'date_taken': now - 1 * 24 * 60 * 60,
+        'faves': 0,
+        'views': 0,
+        'groups': [],
+        'tags': ['streetphotography', 'excluded'],
+        'sets': {},
+        'is_public': True,
+    }
+    greylist = Greylist({}, greylist_config)
+    group_checker_config_ = json.loads(json.dumps(group_checker_config))
+    group_checker_config_['tags']['initial_burst'] = 3
+    group_checker = GroupChecker(
+        tag_groups, view_groups, favorites_groups, group_checker_config_
+    )
+    group_checker(photo, greylist, GroupInfo(group_info))
+    assert len(photo['groups']) == 2
+    assert all(
+        [
+            'street-group-1' in photo['groups'],
+            'street-group-3' in photo['groups'],
+        ]
+    )
+
+
+def test_does_add_legit_tag_groups_in_initial_burst_selects_highest_tier():
+    now = time.time()
+    photo = {
+        'id': 'photo-1',
+        'title': 'Photo 1',
+        'date_posted': now - 1 * 24 * 60 * 60,
+        'date_taken': now - 1 * 24 * 60 * 60,
+        'faves': 0,
+        'views': 0,
+        'groups': [],
+        'tags': ['streetphotography'],
+        'sets': {},
+        'is_public': True,
+    }
+    greylist = Greylist({}, greylist_config)
+    group_checker_config_ = json.loads(json.dumps(group_checker_config))
+    group_checker_config_['tags']['initial_burst'] = 1
+    tag_groups_ = json.loads(json.dumps(tag_groups))
+    tag_groups_['street-group-2']['tier'] = 1
+    group_checker = GroupChecker(
+        tag_groups_, view_groups, favorites_groups, group_checker_config_
+    )
+    group_checker(photo, greylist, GroupInfo(group_info))
+    assert len(photo['groups']) == 1
+    assert 'street-group-2' in photo['groups']
+
+
+def test_does_not_add_legit_but_restricted_tag_groups_in_initial_burst():
+    now = time.time()
+    photo = {
+        'id': 'photo-1',
+        'title': 'Photo 1',
+        'date_posted': now - 1 * 24 * 60 * 60,
+        'date_taken': now - 1 * 24 * 60 * 60,
+        'faves': 0,
+        'views': 0,
+        'groups': [],
+        'tags': ['streetphotography'],
+        'sets': {},
+        'is_public': True,
+    }
+    greylist = Greylist({}, greylist_config)
+    group_checker_config_ = json.loads(json.dumps(group_checker_config))
+    group_checker_config_['tags']['initial_burst'] = 3
+    group_checker = GroupChecker(
+        tag_groups, view_groups, favorites_groups, group_checker_config_
+    )
+    group_info_ = json.loads(json.dumps(group_info))
+    group_info_['street-group-2']['ispoolmoderated'] = True
+    group_checker(photo, greylist, GroupInfo(group_info_))
+    assert len(photo['groups']) == 2
+    assert all(
+        [
+            'street-group-1' in photo['groups'],
+            'street-group-3' in photo['groups'],
+        ]
+    )
+
+
+def test_does_not_add_legit_but_low_tier_groups_in_initial_burst():
+    now = time.time()
+    photo = {
+        'id': 'photo-1',
+        'title': 'Photo 1',
+        'date_posted': now - 1 * 24 * 60 * 60,
+        'date_taken': now - 1 * 24 * 60 * 60,
+        'faves': 0,
+        'views': 0,
+        'groups': [],
+        'tags': ['streetphotography'],
+        'sets': {},
+        'is_public': True,
+    }
+    greylist = Greylist({}, greylist_config)
+    group_checker_config_ = json.loads(json.dumps(group_checker_config))
+    group_checker_config_['tags']['initial_burst'] = 3
+    tag_groups_ = json.loads(json.dumps(tag_groups))
+    tag_groups_['street-group-2']['tier'] = 4
+    group_checker = GroupChecker(
+        tag_groups_, view_groups, favorites_groups, group_checker_config_
+    )
+    group_checker(photo, greylist, GroupInfo(group_info))
+    assert len(photo['groups']) == 2
+    assert all(
+        [
+            'street-group-1' in photo['groups'],
             'street-group-3' in photo['groups'],
         ]
     )
@@ -249,6 +627,61 @@ def test_does_not_remove_legit_tag_groups():
     )
     group_checker(photo, greylist, GroupInfo(group_info))
     assert 'street-group-1' in photo['groups']
+    assert 'street-group-2' in photo['groups']
+
+
+def test_does_remove_non_legit_tag_groups():
+    now = time.time()
+    photo = {
+        'id': 'photo-1',
+        'title': 'Photo 1',
+        'date_posted': now - 1 * 24 * 60 * 60,
+        'date_taken': now - 1 * 24 * 60 * 60,
+        'faves': 0,
+        'views': 0,
+        'groups': [
+            'group-1',
+            'street-group-2',
+        ],
+        'tags': ['streetphotography'],
+        'sets': {},
+        'is_public': True,
+    }
+    greylist = Greylist({}, greylist_config)
+    group_checker = GroupChecker(
+        tag_groups, view_groups, favorites_groups, group_checker_config
+    )
+    group_checker(photo, greylist, GroupInfo(group_info))
+    assert 'group-1' not in photo['groups']
+    assert 'street-group-2' in photo['groups']
+    assert len(photo['groups']) == 1
+
+
+def test_does_not_remove_non_legit_tag_groups_if_restricted():
+    now = time.time()
+    photo = {
+        'id': 'photo-1',
+        'title': 'Photo 1',
+        'date_posted': now - 1 * 24 * 60 * 60,
+        'date_taken': now - 1 * 24 * 60 * 60,
+        'faves': 0,
+        'views': 0,
+        'groups': [
+            'group-1',
+            'street-group-2',
+        ],
+        'tags': ['streetphotography'],
+        'sets': {},
+        'is_public': True,
+    }
+    greylist = Greylist({}, greylist_config)
+    group_checker = GroupChecker(
+        tag_groups, view_groups, favorites_groups, group_checker_config
+    )
+    group_info_ = json.loads(json.dumps(group_info))
+    group_info_['group-1']['ispoolmoderated'] = True
+    group_checker(photo, greylist, GroupInfo(group_info_))
+    assert 'group-1' in photo['groups']
     assert 'street-group-2' in photo['groups']
 
 

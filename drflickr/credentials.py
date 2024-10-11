@@ -11,20 +11,22 @@ import logging
 logger = logging.getLogger(__name__)
 
 
+@returns_result()
 def getCredentials(creds_path, name):
     filename = os.path.join(creds_path, f'{name}.yaml')
     credentials = readYaml(filename)
     if (
-        not credentials.is_ok()
+        not credentials
         or 'key' not in credentials.unwrap()
         or 'secret' not in credentials.unwrap()
     ):
         logger.error(
             f'Provide {name} credentials as `key` and `secret` in file {filename}'
         )
-        if credentials.is_ok():
-            logger.error(credentials.unwrap_err())
-            return credentials
+        if credentials:
+            logger.error(credentials.unwrap())
         else:
-            return Err(None)
-    return credentials
+            logger.error(credentials.unwrap_err())
+        return Err(RuntimeError())
+    else:
+        return credentials

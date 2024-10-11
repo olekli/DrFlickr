@@ -67,7 +67,7 @@ class Runner:
             .load()
             .unwrap_or_return()
         )
-        stats = Stats(api, self.stats_filename).load().unwrap_or_return()
+        stats = Stats(api, self.stats_filename).load()
 
         self.state_store = JsonStore(self.state_store_filename, dry_run=self.dry_run)
         self.retriever = Retriever(api, submissions)
@@ -81,8 +81,7 @@ class Runner:
 
         all_groups = [
             group
-            for groups in [tag_groups[cat]['groups'] for cat in tag_groups.keys()]
-            for group in groups
+            for group in list(tag_groups.keys())
             + [group['nsid'] for group in views_groups]
             + [group['nsid'] for group in favorites_groups]
         ]

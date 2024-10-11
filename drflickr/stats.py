@@ -17,7 +17,6 @@ class Stats:
         self.stats = JsonStore(filename)
         self.period = 28
 
-    @returns_result()
     def load(self):
         with self.stats() as stats:
             stats.setdefault('views', {})
@@ -34,7 +33,7 @@ class Stats:
                 values.append(
                     {'date': last_date.strftime('%Y-%m-%d'), 'value': total_views}
                 )
-        return Ok(self)
+        return self
 
     def filterOutliers(self, data):
         if len(data) == 0:

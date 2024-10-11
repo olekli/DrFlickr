@@ -166,7 +166,12 @@ class Api:
             'description': group['group']['description']['_content'],
             'members': int(group['group']['members']['_content']),
             'throttle': group['group']['throttle'],
+            'ispoolmoderated': bool(group['group']['ispoolmoderated']),
+            'invitation_only': bool(group['group']['invitation_only']),
+            'photo_limit_opt_out': bool(group['group']['photo_limit_opt_out']),
         }
+        if 'remaining' in group['throttle']:
+            group['throttle']['remaining'] = int(group['throttle']['remaining'])
         return Ok(group)
 
     @returns_result()

@@ -13,6 +13,10 @@ class GroupInfo:
         self.group_info = group_info
 
     @noexcept()
+    def isRestricted(self, group_id):
+        return self.group_info[group_id]['ispoolmoderated']
+
+    @noexcept()
     def getName(self, group_id):
         return self.group_info[group_id]['name']
 
