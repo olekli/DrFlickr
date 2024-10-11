@@ -14,7 +14,7 @@ class GroupInfo:
 
     @noexcept()
     def isRestricted(self, group_id):
-        return self.group_info[group_id]['ispoolmoderated']
+        return group_id not in self.group_info or self.group_info[group_id]['ispoolmoderated']
 
     @noexcept()
     def getName(self, group_id):
