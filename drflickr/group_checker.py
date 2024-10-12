@@ -15,7 +15,7 @@ class GroupChecker:
         self.views_groups = views_groups
         self.favorites_groups = favorites_groups
         self.config = config
-        self.group_selector = GroupSelector()
+        self.group_selector = GroupSelector(self.config['selector'])
 
     def __call__(self, photo, greylist, group_info, blacklist):
         self.checkStatGroups(photo)
@@ -75,8 +75,6 @@ class GroupChecker:
                 photo,
                 eligible_groups,
                 group_info,
-                self.config['tags']['initial_burst'],
-                self.config['tags']['switch_phase'],
             )
             logger.debug(f'selected_groups: {selected_groups}')
             if selected_groups:

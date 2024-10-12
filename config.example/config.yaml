@@ -4,9 +4,15 @@ logic:
     stats:
       required_tag: photography
       delay: 120
-    tags:
-      initial_burst: 3
-      switch_phase: 10
+    selector:
+      initial_burst:
+        num_photos: 3
+        min_tier: 3
+      switch_phase:
+        required_photos: 10
+        min_tier: 3
+      dump_phase:
+        max_tier: 3
   publisher:
     queue_album: Queue
     showcase_album: Showcase

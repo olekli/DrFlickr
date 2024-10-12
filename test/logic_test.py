@@ -108,7 +108,19 @@ config_logic = {
     'managed_album': 'All',
     'group_checker': {
         'stats': {'required_tag': 'stats', 'delay': 0},
-        'tags': {'initial_burst': 1, 'switch_phase': 10},
+        'selector': {
+            'initial_burst': {
+                'num_photos': 1,
+                'min_tier': 3
+            },
+            'switch_phase': {
+                'required_photos': 10,
+                'min_tier': 3
+            },
+            'dump_phase': {
+                'max_tier': 3
+            }
+        }
     },
     'publisher': {
         'queue_album': 'Queue',

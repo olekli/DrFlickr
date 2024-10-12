@@ -2,31 +2,30 @@
 # SPDX-License-Identifier: Apache-2.0
 
 import time
-import random
 import logging
 
 logger = logging.getLogger(__name__)
 
 
 class GroupSelector:
-    def __init__(self):
-        self.rng = random.Random(time.time())
+    def __init__(self, config):
+        self.config = config
 
-    def __call__(self, photo, eligible_groups, group_info, initial_burst, switch_phase):
+    def __call__(self, photo, eligible_groups, group_info):
         eligible_groups.sort(key=lambda p: p['tier'])
         logger.debug(f'sorted eligible_groups: {eligible_groups}')
         if len(photo['groups']) == 0:
             eligible_groups = [
                 group
                 for group in eligible_groups
-                if not group_info.isRestricted(group['id']) and group['tier'] < 3
+                if not group_info.isRestricted(group['id']) and group['tier'] <= self.config['initial_burst']['min_tier']
             ]
-            num_to_select = initial_burst
-        elif len(photo['groups']) < switch_phase:
-            eligible_groups = [group for group in eligible_groups if group['tier'] < 4]
+            num_to_select = self.config['initial_burst']['num_photos']
+        elif len(photo['groups']) < self.config['switch_phase']['required_photos']:
+            eligible_groups = [group for group in eligible_groups if group['tier'] <= self.config['switch_phase']['min_tier']]
             num_to_select = 1
         else:
-            eligible_groups = [group for group in eligible_groups if group['tier'] > 2]
+            eligible_groups = [group for group in eligible_groups if group['tier'] >= self.config['dump_phase']['max_tier']]
             num_to_select = 1
 
         result = eligible_groups[:1]
