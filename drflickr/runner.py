@@ -26,8 +26,10 @@ logger = logging.getLogger(__name__)
 
 
 class Runner:
-    def __init__(self, config_path, run_path, creds_path, dry_run=True):
+    def __init__(self, config_path, run_path, creds_path, dry_run=True, debug_dry_run=False):
         self.dry_run = dry_run
+        self.debug_dry_run = debug_dry_run
+        self.local_dry_run = self.dry_run and not self.debug_dry_run
         self.run_path = run_path
         self.creds_path = creds_path
         self.access_token_filename = os.path.join(creds_path, 'access-token.yaml')
@@ -63,7 +65,7 @@ class Runner:
             config['applicator']['throttle']['min_ms'] = 0
             config['applicator']['throttle']['max_ms'] = 1
 
-        submissions = Submissions(self.submissions_filename, dry_run=self.dry_run)
+        submissions = Submissions(self.submissions_filename, dry_run=self.local_dry_run)
         api = (
             Api(dry_run=self.dry_run, api_key=api_key, access_token=access_token)
             .load()
@@ -71,8 +73,8 @@ class Runner:
         )
         stats = Stats(api, self.stats_filename).load()
 
-        self.state_store = JsonStore(self.state_store_filename, dry_run=self.dry_run)
-        self.blacklist_store = JsonStore(self.blacklist_filename, dry_run=self.dry_run)
+        self.state_store = JsonStore(self.state_store_filename, dry_run=self.local_dry_run)
+        self.blacklist_store = JsonStore(self.blacklist_filename, dry_run=self.local_dry_run)
         self.retriever = Retriever(api, submissions)
         self.logic = Logic(
             views_groups=views_groups,

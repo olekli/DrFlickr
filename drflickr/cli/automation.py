@@ -22,9 +22,9 @@ import random
 pidfile_path = '/tmp/flickr-daemon.pid'
 
 
-def create_logger(logfile=None):
+def create_logger(logfile=None, loglevel='INFO'):
     logger = logging.getLogger()
-    logger.setLevel(logging.INFO)
+    logger.setLevel(logging.getLevelName(loglevel))
     formatter = logging.Formatter('%(asctime)s %(levelname)s %(message)s')
 
     # Remove any existing handlers
@@ -49,12 +49,13 @@ def signal_handler(signum, frame, exit_flag):
         sys.exit(1)
 
 
-def run(dry_run, config_path, run_path, creds_path):
+def run(dry_run, debug_dry_run, config_path, run_path, creds_path):
     runner = Runner(
         config_path=config_path,
         run_path=run_path,
         creds_path=creds_path,
         dry_run=dry_run,
+        debug_dry_run=debug_dry_run,
     ).load()
     if runner:
         runner = runner.unwrap()
@@ -73,14 +74,14 @@ def run(dry_run, config_path, run_path, creds_path):
         return runner
 
 
-def loop(interval, exit_flag, dry_run, config_path, run_path, creds_path):
+def loop(singleshot, interval, exit_flag, dry_run, debug_dry_run, config_path, run_path, creds_path):
     logging.info('Startup')
     signal.signal(signal.SIGTERM, lambda s, f: signal_handler(s, f, exit_flag))
     signal.signal(signal.SIGINT, lambda s, f: signal_handler(s, f, exit_flag))
 
     while not exit_flag['flag']:
-        result = run(dry_run, config_path, run_path, creds_path)
-        if not result:
+        result = run(dry_run, debug_dry_run, config_path, run_path, creds_path)
+        if not result or singleshot:
             break
 
         total_sleep = 0
@@ -103,6 +104,7 @@ def automation():
 @automation.command()
 @click.option('--daemon/--no-daemon', default=False, help='Run as a daemon.')
 @click.option('--logfile', type=click.Path(), default=None, help='Path to the logfile.')
+@click.option('--loglevel', type=str, default='INFO', help='Logger verbosity.')
 @click.option(
     '--interval',
     type=int,
@@ -112,10 +114,16 @@ def automation():
 @click.option(
     '--dry-run/--no-dry-run', default=True, help='Enable or disable dry run mode.'
 )
+@click.option(
+    '--debug-dry-run/--no-debug-dry-run', default=False, help='Still write local files.'
+)
+@click.option(
+    '--singleshot/--no-singleshot', default=False, help='Runs once then exits.'
+)
 @config_path_option
 @run_path_option
 @creds_path_option
-def start(daemon, logfile, interval, dry_run, config_path, run_path, creds_path):
+def start(daemon, logfile, interval, dry_run, debug_dry_run, config_path, run_path, creds_path, loglevel, singleshot):
     if os.path.exists(pidfile_path):
         try:
             with open(pidfile_path, 'r') as f:
@@ -142,7 +150,7 @@ def start(daemon, logfile, interval, dry_run, config_path, run_path, creds_path)
             print(f'Cannot write to logfile {logfile}. Please check permissions.')
             sys.exit(1)
 
-        logger = create_logger(logfile)
+        logger = create_logger(logfile, loglevel)
         preserve_fds = [handler.stream.fileno() for handler in logger.handlers]
 
         pidfile = PIDLockFile(pidfile_path)
@@ -152,15 +160,15 @@ def start(daemon, logfile, interval, dry_run, config_path, run_path, creds_path)
             files_preserve=preserve_fds,
             working_directory='./',
         ) as context:
-            loop(interval, exit_flag, dry_run, config_path, run_path, creds_path)
+            loop(singleshot, interval, exit_flag, dry_run, debug_dry_run, config_path, run_path, creds_path)
     else:
-        logger = create_logger(logfile)
+        logger = create_logger(logfile, loglevel)
 
         with open(pidfile_path, 'w') as f:
             f.write(str(os.getpid()))
 
         try:
-            loop(interval, exit_flag, dry_run, config_path, run_path, creds_path)
+            loop(singleshot, interval, exit_flag, dry_run, debug_dry_run, config_path, run_path, creds_path)
         finally:
             if os.path.exists(pidfile_path):
                 os.remove(pidfile_path)
