@@ -427,13 +427,12 @@
 
 1985435@N21:
   id: 1985435@N21
-  tier: 1
+  tier: 2
   tags:
     require:
       - streetphotography
       - people
       - street
-      - curated
 
 71456407@N00:
   id: 71456407@N00
@@ -807,13 +806,6 @@
       - people
       - human
 
-82124140@N00:
-  id: 82124140@N00
-  tier: 3
-  tags:
-    require:
-      - shadow
-
 26656994@N00:
   id: 26656994@N00
   tier: 3
@@ -928,42 +920,31 @@
   tier: 3
   tags:
     require:
-      - urban
-      - bird
+      - urbanbirds
 
 19993514@N00:
   id: 19993514@N00
   tier: 3
   tags:
     require:
-      - urban
-      - bird
+      - urbanbirds
 
 2527008@N23:
   id: 2527008@N23
   tier: 3
   tags:
     require:
-      - urban
-      - bird
+      - urbanbirds
 
 14846425@N21:
   id: 14846425@N21
   tier: 3
   tags:
     require:
-      - urban
-      - bird
+      - urbanbirds
 
 954741@N23:
   id: 954741@N23
-  tier: 3
-  tags:
-    require:
-      - liminality
-
-60333953@N00:
-  id: 60333953@N00
   tier: 3
   tags:
     require:
@@ -974,14 +955,14 @@
   tier: 3
   tags:
     require:
-      - liminality
+      - surreal
 
 1244708@N21:
   id: 1244708@N21
   tier: 3
   tags:
     require:
-      - liminality
+      - surreal
 
 983115@N24:
   id: 983115@N24
@@ -1013,10 +994,10 @@
 
 64788317@N00:
   id: 64788317@N00
-  tier: 3
+  tier: 2
   tags:
     require:
-      - liminality
+      - atmosphere
 
 38032420@N00:
   id: 38032420@N00
@@ -1094,3 +1075,24 @@
   tags:
     require:
       - nightphotography
+
+650267@N25:
+  id: 650267@N25
+  tier: 4
+  tags:
+    require:
+      - sky
+
+1222155@N23:
+  id: 1222155@N23
+  tier: 4
+  tags:
+    require:
+      - sky
+
+92122969@N00:
+  id: 92122969@N00
+  tier: 3
+  tags:
+    require:
+      - sky
