@@ -40,8 +40,10 @@ class Runner:
         self.submissions_filename = os.path.join(run_path, 'submissions.json')
         self.stats_filename = os.path.join(run_path, 'stats.json')
         self.state_store_filename = os.path.join(run_path, 'state_store.json')
+        self.blacklist_filename = os.path.join(run_path, 'blacklist.json')
 
         self.state_store = None
+        self.blacklist_store = None
         self.retriever = None
         self.logic = None
         self.applicator = None
@@ -70,6 +72,7 @@ class Runner:
         stats = Stats(api, self.stats_filename).load()
 
         self.state_store = JsonStore(self.state_store_filename, dry_run=self.dry_run)
+        self.blacklist_store = JsonStore(self.blacklist_filename, dry_run=self.dry_run)
         self.retriever = Retriever(api, submissions)
         self.logic = Logic(
             views_groups=views_groups,
@@ -102,17 +105,21 @@ class Runner:
 
     @returns_result()
     def __call__(self):
-        retriever_result = self.retriever().unwrap_or_return()
+        with self.blacklist_store.transaction() as blacklist:
+            retriever_result = self.retriever(blacklist).unwrap_or_raise()
+            blacklist.clear()
+            blacklist.update(retriever_result.blacklist)
         with self.state_store.transaction() as state:
             state.setdefault('photos_expected', {})
             state.setdefault('logic_greylist', {})
             state.setdefault('group_info', {})
 
             logic_result = self.logic(
-                retriever_result.photos_actual,
-                state['photos_expected'],
-                state['logic_greylist'],
-                state['group_info'],
+                photos_actual=retriever_result.photos_actual,
+                photos_expected=state['photos_expected'],
+                greylist=state['logic_greylist'],
+                group_info=state['group_info'],
+                blacklist=retriever_result.blacklist
             )
 
             state['photos_expected'] = logic_result.photos_expected

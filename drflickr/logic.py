@@ -33,7 +33,7 @@ class Logic:
         self.reorderer = Reorderer(config['reorderer'])
         self.reconciler = Reconciler()
 
-    def __call__(self, photos_actual, photos_expected, greylist, group_info):
+    def __call__(self, photos_actual, photos_expected, greylist, group_info, blacklist):
         photos_expected = json.loads(json.dumps(photos_expected))
         greylist = Greylist(json.loads(json.dumps(greylist)), self.config['greylist'])
         group_info = GroupInfo(json.loads(json.dumps(group_info)))
@@ -89,7 +89,7 @@ class Logic:
             if photo['is_public']
         }
         for photo in photos_expected_public.values():
-            self.group_checker(photo, greylist, group_info)
+            self.group_checker(photo, greylist, group_info, blacklist)
         self.publisher(photos_expected.values(), greylist)
         if self.config['reorderer']['enabled'] and not greylist.has(
             'ordering', 'photos_ordered'

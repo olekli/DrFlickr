@@ -17,11 +17,11 @@ class GroupChecker:
         self.config = config
         self.group_selector = GroupSelector()
 
-    def __call__(self, photo, greylist, group_info):
+    def __call__(self, photo, greylist, group_info, blacklist):
         self.checkStatGroups(photo)
-        self.checkTagGroups(photo, greylist, group_info)
+        self.checkTagGroups(photo, greylist, group_info, blacklist)
 
-    def checkTagGroups(self, photo, greylist, group_info):
+    def checkTagGroups(self, photo, greylist, group_info, blacklist):
         logger.info(f'Checking photo for groups {photo["title"]} {photo["id"]}')
         logger.debug(f'tag_groups: {self.tag_groups}')
         for group in self.tag_groups:
@@ -55,7 +55,10 @@ class GroupChecker:
         photo['groups'] = [
             group_id
             for group_id in photo['groups']
-            if group_id in allowed_group_ids or group_info.isRestricted(group_id)
+            if
+                group_id in allowed_group_ids
+                or group_info.isRestricted(group_id)
+                or group_id in blacklist[photo['id']]['manually_added']
         ]
         logger.debug(f'photo["groups"] after purge: {photo["groups"]}')
         if not greylist.has('photo', photo['id']):
@@ -65,6 +68,7 @@ class GroupChecker:
                 if not greylist.has('group', group['id'])
                 and not group['id'] in photo['groups']
                 and not group_info.hasPhotoLimit(group['id'])
+                and not group['id'] in blacklist[photo['id']]['blocked']
             ]
             logger.debug(f'eligible_groups: {eligible_groups}')
             selected_groups = self.group_selector(

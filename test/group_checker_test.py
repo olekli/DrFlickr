@@ -121,6 +121,11 @@ group_checker_config = {
     'tags': {'initial_burst': 1, 'switch_phase': 10},
 }
 
+blacklist = {
+    'photo-1': { 'blocked': [], 'manually_added': [] },
+    'photo-2': { 'blocked': [], 'manually_added': [] },
+}
+
 
 def test_does_add_legit_tag_groups():
     now = time.time()
@@ -140,7 +145,7 @@ def test_does_add_legit_tag_groups():
     group_checker = GroupChecker(
         tag_groups, view_groups, favorites_groups, group_checker_config
     )
-    group_checker(photo, greylist, GroupInfo(group_info))
+    group_checker(photo, greylist, GroupInfo(group_info), blacklist)
     assert len(photo['groups']) == 1
     assert any(
         [
@@ -171,7 +176,7 @@ def test_does_add_legit_tag_groups_in_initial_burst():
     group_checker = GroupChecker(
         tag_groups, view_groups, favorites_groups, group_checker_config_
     )
-    group_checker(photo, greylist, GroupInfo(group_info))
+    group_checker(photo, greylist, GroupInfo(group_info), blacklist)
     assert len(photo['groups']) == 2
     assert any(
         [
@@ -203,7 +208,7 @@ def test_does_add_legit_tag_groups_after_initial_burst():
     group_checker = GroupChecker(
         tag_groups, view_groups, favorites_groups, group_checker_config_
     )
-    group_checker(photo, greylist, GroupInfo(group_info))
+    group_checker(photo, greylist, GroupInfo(group_info), blacklist)
     assert len(photo['groups']) == 3
     assert all(
         [
@@ -237,7 +242,7 @@ def test_does_add_legit_tag_groups_in_dump_phase():
     group_checker = GroupChecker(
         tag_groups_, view_groups, favorites_groups, group_checker_config_
     )
-    group_checker(photo, greylist, GroupInfo(group_info))
+    group_checker(photo, greylist, GroupInfo(group_info), blacklist)
     assert len(photo['groups']) == 3
     assert all(
         [
@@ -271,7 +276,7 @@ def test_does_not_add_legit_higher_tier_tag_groups_in_dump_phase():
     group_checker = GroupChecker(
         tag_groups_, view_groups, favorites_groups, group_checker_config_
     )
-    group_checker(photo, greylist, GroupInfo(group_info))
+    group_checker(photo, greylist, GroupInfo(group_info), blacklist)
     assert len(photo['groups']) == 2
     assert all(
         [
@@ -304,7 +309,7 @@ def test_does_add_legit_and_restricted_tag_groups_after_initial_burst():
     )
     group_info_ = json.loads(json.dumps(group_info))
     group_info_['street-group-2']['ispoolmoderated'] = True
-    group_checker(photo, greylist, GroupInfo(group_info_))
+    group_checker(photo, greylist, GroupInfo(group_info_), blacklist)
     assert len(photo['groups']) == 3
     assert all(
         [
@@ -336,7 +341,7 @@ def test_does_not_add_excluded_tag_groups_after_initial_burst():
     group_checker = GroupChecker(
         tag_groups, view_groups, favorites_groups, group_checker_config_
     )
-    group_checker(photo, greylist, GroupInfo(group_info))
+    group_checker(photo, greylist, GroupInfo(group_info), blacklist)
     assert len(photo['groups']) == 2
     assert all(
         [
@@ -366,7 +371,7 @@ def test_does_not_add_excluded_tag_groups_in_initial_burst():
     group_checker = GroupChecker(
         tag_groups, view_groups, favorites_groups, group_checker_config_
     )
-    group_checker(photo, greylist, GroupInfo(group_info))
+    group_checker(photo, greylist, GroupInfo(group_info), blacklist)
     assert len(photo['groups']) == 2
     assert all(
         [
@@ -398,7 +403,7 @@ def test_does_add_legit_tag_groups_in_initial_burst_selects_highest_tier():
     group_checker = GroupChecker(
         tag_groups_, view_groups, favorites_groups, group_checker_config_
     )
-    group_checker(photo, greylist, GroupInfo(group_info))
+    group_checker(photo, greylist, GroupInfo(group_info), blacklist)
     assert len(photo['groups']) == 1
     assert 'street-group-2' in photo['groups']
 
@@ -425,7 +430,7 @@ def test_does_not_add_legit_but_restricted_tag_groups_in_initial_burst():
     )
     group_info_ = json.loads(json.dumps(group_info))
     group_info_['street-group-2']['ispoolmoderated'] = True
-    group_checker(photo, greylist, GroupInfo(group_info_))
+    group_checker(photo, greylist, GroupInfo(group_info_), blacklist)
     assert len(photo['groups']) == 2
     assert all(
         [
@@ -457,7 +462,7 @@ def test_does_not_add_legit_but_low_tier_groups_in_initial_burst():
     group_checker = GroupChecker(
         tag_groups_, view_groups, favorites_groups, group_checker_config_
     )
-    group_checker(photo, greylist, GroupInfo(group_info))
+    group_checker(photo, greylist, GroupInfo(group_info), blacklist)
     assert len(photo['groups']) == 2
     assert all(
         [
@@ -489,7 +494,30 @@ def test_does_not_add_legit_tag_group_when_limited():
     group_checker = GroupChecker(
         tag_groups, view_groups, favorites_groups, group_checker_config
     )
-    group_checker(photo, greylist, GroupInfo(group_info_))
+    group_checker(photo, greylist, GroupInfo(group_info_), blacklist)
+    assert len(photo['groups']) == 0
+
+def test_does_not_add_legit_tag_group_when_blacklisted():
+    now = time.time()
+    photo = {
+        'id': 'photo-1',
+        'title': 'Photo 1',
+        'date_posted': now - 1 * 24 * 60 * 60,
+        'date_taken': now - 1 * 24 * 60 * 60,
+        'faves': 0,
+        'views': 0,
+        'groups': [],
+        'tags': ['streetphotography'],
+        'sets': {},
+        'is_public': True,
+    }
+    greylist = Greylist({}, greylist_config_disabled)
+    group_checker = GroupChecker(
+        tag_groups, view_groups, favorites_groups, group_checker_config
+    )
+    blacklist_ = json.loads(json.dumps(blacklist))
+    blacklist_['photo-1']['blocked'] = ['street-group-1', 'street-group-2', 'street-group-3']
+    group_checker(photo, greylist, GroupInfo(group_info), blacklist_)
     assert len(photo['groups']) == 0
 
 
@@ -515,14 +543,14 @@ def test_does_add_legit_tag_group_that_is_not_limited():
     group_checker = GroupChecker(
         tag_groups, view_groups, favorites_groups, group_checker_config
     )
-    group_checker(photo, greylist, GroupInfo(group_info_))
+    group_checker(photo, greylist, GroupInfo(group_info_), blacklist)
     assert len(photo['groups']) == 1
     assert photo['groups'] == ['street-group-2']
 
     group_checker = GroupChecker(
         tag_groups, view_groups, favorites_groups, group_checker_config
     )
-    group_checker(photo, greylist, GroupInfo(group_info_))
+    group_checker(photo, greylist, GroupInfo(group_info_), blacklist)
 
     assert len(photo['groups']) == 1
     assert photo['groups'] == ['street-group-2']
@@ -550,14 +578,14 @@ def test_does_add_legit_tag_group_only_as_long_as_remaining():
     group_checker = GroupChecker(
         tag_groups, view_groups, favorites_groups, group_checker_config
     )
-    group_checker(photo, greylist, GroupInfo(group_info_))
+    group_checker(photo, greylist, GroupInfo(group_info_), blacklist)
     assert len(photo['groups']) == 1
     assert photo['groups'] == ['street-group-2']
 
     group_checker = GroupChecker(
         tag_groups, view_groups, favorites_groups, group_checker_config
     )
-    group_checker(photo, greylist, GroupInfo(group_info_))
+    group_checker(photo, greylist, GroupInfo(group_info_), blacklist)
 
     assert len(photo['groups']) == 1
     assert photo['groups'] == ['street-group-2']
@@ -578,7 +606,7 @@ def test_does_add_legit_tag_group_only_as_long_as_remaining():
     group_checker = GroupChecker(
         tag_groups, view_groups, favorites_groups, group_checker_config
     )
-    group_checker(photo_2, greylist, GroupInfo(group_info_))
+    group_checker(photo_2, greylist, GroupInfo(group_info_), blacklist)
 
     assert len(photo_2['groups']) == 1
     assert photo['groups'] == ['street-group-2']
@@ -599,7 +627,7 @@ def test_does_add_legit_tag_group_only_as_long_as_remaining():
     group_checker = GroupChecker(
         tag_groups, view_groups, favorites_groups, group_checker_config
     )
-    group_checker(photo_3, greylist, GroupInfo(group_info_))
+    group_checker(photo_3, greylist, GroupInfo(group_info_), blacklist)
 
     assert len(photo_3['groups']) == 0
 
@@ -625,7 +653,7 @@ def test_does_not_remove_legit_tag_groups():
     group_checker = GroupChecker(
         tag_groups, view_groups, favorites_groups, group_checker_config
     )
-    group_checker(photo, greylist, GroupInfo(group_info))
+    group_checker(photo, greylist, GroupInfo(group_info), blacklist)
     assert 'street-group-1' in photo['groups']
     assert 'street-group-2' in photo['groups']
 
@@ -651,7 +679,7 @@ def test_does_remove_non_legit_tag_groups():
     group_checker = GroupChecker(
         tag_groups, view_groups, favorites_groups, group_checker_config
     )
-    group_checker(photo, greylist, GroupInfo(group_info))
+    group_checker(photo, greylist, GroupInfo(group_info), blacklist)
     assert 'group-1' not in photo['groups']
     assert 'street-group-2' in photo['groups']
     assert len(photo['groups']) == 1
@@ -680,10 +708,36 @@ def test_does_not_remove_non_legit_tag_groups_if_restricted():
     )
     group_info_ = json.loads(json.dumps(group_info))
     group_info_['group-1']['ispoolmoderated'] = True
-    group_checker(photo, greylist, GroupInfo(group_info_))
+    group_checker(photo, greylist, GroupInfo(group_info_), blacklist)
     assert 'group-1' in photo['groups']
     assert 'street-group-2' in photo['groups']
 
+def test_does_not_remove_non_legit_tag_groups_if_manually_added():
+    now = time.time()
+    photo = {
+        'id': 'photo-1',
+        'title': 'Photo 1',
+        'date_posted': now - 1 * 24 * 60 * 60,
+        'date_taken': now - 1 * 24 * 60 * 60,
+        'faves': 0,
+        'views': 0,
+        'groups': [
+            'group-1',
+            'street-group-2',
+        ],
+        'tags': ['streetphotography'],
+        'sets': {},
+        'is_public': True,
+    }
+    greylist = Greylist({}, greylist_config)
+    group_checker = GroupChecker(
+        tag_groups, view_groups, favorites_groups, group_checker_config
+    )
+    blacklist_ = json.loads(json.dumps(blacklist))
+    blacklist_['photo-1']['manually_added'] = ['group-1']
+    group_checker(photo, greylist, GroupInfo(group_info), blacklist_)
+    assert 'group-1' in photo['groups']
+    assert 'street-group-2' in photo['groups']
 
 def test_does_not_add_tag_groups_when_greylisted():
     now = time.time()
@@ -713,7 +767,7 @@ def test_does_not_add_tag_groups_when_greylisted():
     group_checker = GroupChecker(
         tag_groups, view_groups, favorites_groups, group_checker_config
     )
-    group_checker(photo, greylist, GroupInfo(group_info))
+    group_checker(photo, greylist, GroupInfo(group_info), blacklist)
     assert len(photo['groups']) == 0
 
 
@@ -745,7 +799,7 @@ def test_does_not_add_stat_groups_when_tag_is_missing():
     group_checker = GroupChecker(
         tag_groups, view_groups, favorites_groups, group_checker_config
     )
-    group_checker(photo, greylist, GroupInfo(group_info))
+    group_checker(photo, greylist, GroupInfo(group_info), blacklist)
     assert len(photo['groups']) == 0
 
 
@@ -779,7 +833,7 @@ def test_does_not_add_stat_groups_when_delay_not_passed():
     group_checker = GroupChecker(
         tag_groups, view_groups, favorites_groups, group_checker_config_
     )
-    group_checker(photo, greylist, GroupInfo(group_info))
+    group_checker(photo, greylist, GroupInfo(group_info), blacklist)
     assert len(photo['groups']) == 0
 
 
@@ -811,7 +865,7 @@ def test_does_add_correct_stat_groups():
     group_checker = GroupChecker(
         tag_groups, view_groups, favorites_groups, group_checker_config
     )
-    group_checker(photo, greylist, GroupInfo(group_info))
+    group_checker(photo, greylist, GroupInfo(group_info), blacklist)
     assert len(photo['groups']) == 2
     assert all(
         [
@@ -849,7 +903,7 @@ def test_does_correct_stat_groups_not_removed():
     group_checker = GroupChecker(
         tag_groups, view_groups, favorites_groups, group_checker_config
     )
-    group_checker(photo, greylist, GroupInfo(group_info))
+    group_checker(photo, greylist, GroupInfo(group_info), blacklist)
     assert len(photo['groups']) == 2
     assert all(
         [
@@ -887,7 +941,7 @@ def test_does_correctly_changes_stat_groups_views():
     group_checker = GroupChecker(
         tag_groups, view_groups, favorites_groups, group_checker_config
     )
-    group_checker(photo, greylist, GroupInfo(group_info))
+    group_checker(photo, greylist, GroupInfo(group_info), blacklist)
     assert len(photo['groups']) == 2
     assert all(
         [
@@ -925,7 +979,7 @@ def test_does_correctly_changes_stat_groups_faves():
     group_checker = GroupChecker(
         tag_groups, view_groups, favorites_groups, group_checker_config
     )
-    group_checker(photo, greylist, GroupInfo(group_info))
+    group_checker(photo, greylist, GroupInfo(group_info), blacklist)
     assert len(photo['groups']) == 2
     assert all(
         [
@@ -963,7 +1017,7 @@ def test_does_correctly_changes_stat_groups_both():
     group_checker = GroupChecker(
         tag_groups, view_groups, favorites_groups, group_checker_config
     )
-    group_checker(photo, greylist, GroupInfo(group_info))
+    group_checker(photo, greylist, GroupInfo(group_info), blacklist)
     assert len(photo['groups']) == 2
     assert all(
         [

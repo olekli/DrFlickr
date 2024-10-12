@@ -129,6 +129,9 @@ class Api:
             }
             for photo in photos
         ]
+        for photo in photos:
+            contexts = self.call('photos.getAllContexts', {'photo_id': photo['id']}).unwrap_or_return()
+            photo['groups'] = [pool['id'] for pool in contexts.get('pool', [])]
         photos = {photo['id']: photo for photo in photos}
         return Ok(photos)
 
