@@ -11,17 +11,16 @@ logic:
     queue_album: Queue
     showcase_album: Showcase
     time_window_start: 8
-    time_window_end: 9
+    time_window_end: 11
   reorderer:
     enabled: false
     days_until_being_ordered: 7
   greylist:
     group:
       photo_added: 16
-      photo_added_to_category: 1
     photo:
-      added_to_group: 1
-      published: 6
+      added_to_group: 24
+      published: 4
     publish:
       published10: 68
       published15: 40

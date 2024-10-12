@@ -106,8 +106,8 @@ def automation():
 @click.option(
     '--interval',
     type=int,
-    default=60,
-    help='Interval in minutes between executions (default: 60).',
+    default=120,
+    help='Interval in minutes between executions (default: 120).',
 )
 @click.option(
     '--dry-run/--no-dry-run', default=True, help='Enable or disable dry run mode.'
