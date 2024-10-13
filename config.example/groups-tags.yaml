@@ -1096,3 +1096,116 @@
   tags:
     require:
       - sky
+
+2127445@N25:
+  id: 2127445@N25
+  tier: 4
+  tags:
+    require:
+      - streetphotography
+      - people
+
+949304@N23:
+  id: 949304@N23
+  tier: 3
+  tags:
+    require:
+      - nightphotography
+      - streetphotography
+
+2790666@N22:
+  id: 2790666@N22
+  tier: 2
+  tags:
+    require:
+      - streetphotography
+      - people
+
+94379102@N00:
+  id: 94379102@N00
+  tier: 2
+  tags:
+    require:
+      - streetphotography
+      - funny
+
+2666329@N22:
+  id: 2666329@N22
+  tier: 4
+  tags:
+    require:
+      - streetphotography
+
+2178037@N23:
+  id: 2178037@N23
+  tier: 3
+  tags:
+    require:
+      - streetphotography
+
+71183855@N00:
+  id: 71183855@N00
+  tier: 3
+  tags:
+    require:
+      - streetphotography
+      - people
+      - candid
+
+1633004@N25:
+  id: 1633004@N25
+  tier: 3
+  tags:
+    require:
+      - streetphotography
+      - people
+      - candid
+
+2601778@N22:
+  id: 2601778@N22
+  tier: 2
+  tags:
+    require:
+      - streetphotography
+
+2772262@N23:
+  id: 2772262@N23
+  tier: 1
+  tags:
+    require:
+      - streetphotography
+      - curated
+
+977104@N24:
+  id: 977104@N24
+  tier: 3
+  tags:
+    require:
+      - streetphotography
+      - people
+
+2447540@N20:
+  id: 2447540@N20
+  tier: 2
+  tags:
+    require:
+      - streetphotography
+      - color
+      - people
+
+311510@N20:
+  id: 311510@N20
+  tier: 1
+  tags:
+    require:
+      - streetphotography
+      - people
+      - street
+
+25555016@N00:
+  id: 25555016@N00
+  tier: 3
+  tags:
+    require:
+      - streetphotography
+      - street
