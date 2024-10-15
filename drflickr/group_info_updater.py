@@ -21,7 +21,7 @@ class GroupInfoUpdater:
         for group_id in [g for g in group_list if g not in group_info]:
             group_info[group_id] = {'name': group_id, 'last_update': 0}
         for group_id in group_info:
-            if (group_info[group_id]['last_update'] + 24 * 60 * 60) < time.time():
+            if (group_info[group_id]['last_update'] + 24 * 60 * 60) < time.time() or group_info['ispoolmoderated']:
                 result = self.api.getGroupInfo(group_id)
                 if result:
                     group_info[group_id] = {

@@ -79,10 +79,10 @@ class Applicator:
                     return Ok(result)
                 elif result.code == 5:
                     # photo limit
-                    logger.info(
+                    logger.warning(
                         f'group {self.group_info.getName(group_id)} photo limit hit'
                     )
-                    assert False, "Should not happen anymore"
+                    return Err(result)
                 elif (result.code == 6) or (result.code == 7):
                     # photo already in pending
                     # in case this entry was missed in submissions, add it now
