@@ -21,7 +21,7 @@ class GroupSelector:
                 if not group_info.isRestricted(group['id']) and group['tier'] <= self.config['initial_burst']['min_tier']
             ]
             num_to_select = self.config['initial_burst']['num_photos']
-        elif len(photo['groups']) < self.config['switch_phase']['required_photos']:
+        elif len(photo['groups']) < self.config['switch_phase']['num_required_groups'] or self.config['switch_phase']['curated_tag'] in photo['tags']:
             eligible_groups = [group for group in eligible_groups if group['tier'] <= self.config['switch_phase']['min_tier']]
             num_to_select = 1
         else:

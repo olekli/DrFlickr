@@ -9,7 +9,8 @@ logic:
         num_photos: 3
         min_tier: 3
       switch_phase:
-        required_photos: 10
+        curated_tag: curated
+        num_required_groups: 10
         min_tier: 3
       dump_phase:
         max_tier: 3
