@@ -114,8 +114,9 @@ config_logic = {
                 'min_tier': 3
             },
             'switch_phase': {
-                'required_photos': 10,
-                'min_tier': 3
+                'num_required_groups': 10,
+                'min_tier': 3,
+                'curated_tag': 'curated',
             },
             'dump_phase': {
                 'max_tier': 3

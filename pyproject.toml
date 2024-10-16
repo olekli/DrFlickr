@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "drflickr"
-version = "0.2.2"
+version = "0.3.0"
 description = "Provides a daemon to automate certain tasks on Flickr"
 authors = ["Ole Kliemann <mail@olekliemann.de>"]
 
@@ -11,8 +11,8 @@ click = "^8.1.7"
 pyyaml = "^6.0.2"
 python-daemon = "^3.0.1"
 
-mrjsonstore = "^0.4.1"
-drresult = "^0.4.3"
+mrjsonstore = "^0.5.0"
+drresult = "^0.6.3"
 [tool.poetry.group.dev.dependencies]
 pytest = "^8.3.3"
 

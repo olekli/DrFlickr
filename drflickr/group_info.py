@@ -12,15 +12,15 @@ class GroupInfo:
     def __init__(self, group_info):
         self.group_info = group_info
 
-    @noexcept()
+    @noexcept
     def isRestricted(self, group_id):
         return group_id not in self.group_info or self.group_info[group_id]['ispoolmoderated']
 
-    @noexcept()
+    @noexcept
     def getName(self, group_id):
         return self.group_info[group_id]['name']
 
-    @noexcept()
+    @noexcept
     def hasPhotoLimit(self, group_id):
         group = self.group_info[group_id]
         return (
@@ -29,7 +29,7 @@ class GroupInfo:
             and group['throttle']['remaining'] <= 0
         )
 
-    @noexcept()
+    @noexcept
     def reduceRemaining(self, group_id):
         group = self.group_info[group_id]
         if 'throttle' in group and 'remaining' in group['throttle']:

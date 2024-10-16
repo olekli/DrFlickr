@@ -10,30 +10,32 @@ import logging
 
 logger = logging.getLogger(__name__)
 
-
 class Stats:
     def __init__(self, api, filename):
         self.api = api
-        self.stats = JsonStore(filename)
+        self.filename = filename
+        self.stats = None
         self.period = 28
 
+    @returns_result
     def load(self):
-        with self.stats() as stats:
-            stats.setdefault('views', {})
-            stats['views'].setdefault('total', [])
-            today = date.today() - timedelta(days=1)
-            values = stats['views']['total']
-            if len(values) == 0:
-                last_date = today - timedelta(days=(self.period * 2))
-            else:
-                last_date = datetime.strptime(values[-1]['date'], '%Y-%m-%d').date()
-            while last_date < today:
-                last_date += timedelta(days=1)
-                total_views = self.api.getTotalViews(last_date)
-                values.append(
-                    {'date': last_date.strftime('%Y-%m-%d'), 'value': total_views}
-                )
-        return self
+        self.stats = JsonStore(self.filename).unwrap_or_raise()
+        self.stats.content.setdefault('views', {})
+        self.stats.content['views'].setdefault('total', [])
+        today = date.today() - timedelta(days=1)
+        values = self.stats.content['views']['total']
+        if len(values) == 0:
+            last_date = today - timedelta(days=(self.period * 2))
+        else:
+            last_date = datetime.strptime(values[-1]['date'], '%Y-%m-%d').date()
+        while last_date < today:
+            last_date += timedelta(days=1)
+            total_views = self.api.getTotalViews(last_date)
+            values.append(
+                {'date': last_date.strftime('%Y-%m-%d'), 'value': total_views}
+            )
+        self.stats.commit().unwrap_or_raise()
+        return Ok(self)
 
     def filterOutliers(self, data):
         if len(data) == 0:
@@ -61,7 +63,7 @@ class Stats:
 
     def viewsBelowEma(self):
         logger.info(f'checking views agains EMA')
-        views = [x['value'] for x in self.stats.view()['views']['total']]
+        views = [x['value'] for x in self.stats.content['views']['total']]
         views = self.filterOutliers(views)
         ema = self.calcEma(views[:-1])
         ema = ema * 1.4

@@ -8,6 +8,7 @@ from drflickr.cli.path_options import (
     creds_path_option,
 )
 
+from drresult import log_panic
 import click
 import traceback
 from daemon import DaemonContext
@@ -168,7 +169,8 @@ def start(daemon, logfile, interval, dry_run, debug_dry_run, config_path, run_pa
             f.write(str(os.getpid()))
 
         try:
-            loop(singleshot, interval, exit_flag, dry_run, debug_dry_run, config_path, run_path, creds_path)
+            with log_panic(logger):
+                loop(singleshot, interval, exit_flag, dry_run, debug_dry_run, config_path, run_path, creds_path)
         finally:
             if os.path.exists(pidfile_path):
                 os.remove(pidfile_path)

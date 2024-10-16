@@ -124,8 +124,9 @@ group_checker_config = {
             'min_tier': 3
         },
         'switch_phase': {
-            'required_photos': 10,
-            'min_tier': 3
+            'num_required_groups': 10,
+            'min_tier': 3,
+            'curated_tag': 'curated',
         },
         'dump_phase': {
             'max_tier': 3
@@ -216,7 +217,7 @@ def test_does_add_legit_tag_groups_after_initial_burst():
     greylist = Greylist({}, greylist_config)
     group_checker_config_ = json.loads(json.dumps(group_checker_config))
     group_checker_config_['selector']['initial_burst']['num_photos'] = 2
-    group_checker_config_['selector']['switch_phase']['required_photos'] = 3
+    group_checker_config_['selector']['switch_phase']['num_required_groups'] = 3
     group_checker = GroupChecker(
         tag_groups, view_groups, favorites_groups, group_checker_config_
     )
@@ -248,7 +249,7 @@ def test_does_add_legit_tag_groups_in_dump_phase():
     greylist = Greylist({}, greylist_config)
     group_checker_config_ = json.loads(json.dumps(group_checker_config))
     group_checker_config_['selector']['initial_burst']['num_photos'] = 2
-    group_checker_config_['selector']['switch_phase']['required_photos'] = 2
+    group_checker_config_['selector']['switch_phase']['num_required_groups'] = 2
     tag_groups_ = json.loads(json.dumps(tag_groups))
     tag_groups_['street-group-2']['tier'] = 3
     group_checker = GroupChecker(
@@ -282,7 +283,7 @@ def test_does_not_add_legit_higher_tier_tag_groups_in_dump_phase():
     greylist = Greylist({}, greylist_config)
     group_checker_config_ = json.loads(json.dumps(group_checker_config))
     group_checker_config_['selector']['initial_burst']['num_photos'] = 2
-    group_checker_config_['selector']['switch_phase']['required_photos'] = 2
+    group_checker_config_['selector']['switch_phase']['num_required_groups'] = 2
     tag_groups_ = json.loads(json.dumps(tag_groups))
     tag_groups_['street-group-2']['tier'] = 2
     group_checker = GroupChecker(
@@ -315,7 +316,7 @@ def test_does_add_legit_and_restricted_tag_groups_after_initial_burst():
     greylist = Greylist({}, greylist_config)
     group_checker_config_ = json.loads(json.dumps(group_checker_config))
     group_checker_config_['selector']['initial_burst']['num_photos'] = 2
-    group_checker_config_['selector']['switch_phase']['required_photos'] = 3
+    group_checker_config_['selector']['switch_phase']['num_required_groups'] = 3
     group_checker = GroupChecker(
         tag_groups, view_groups, favorites_groups, group_checker_config_
     )
@@ -349,7 +350,7 @@ def test_does_not_add_excluded_tag_groups_after_initial_burst():
     greylist = Greylist({}, greylist_config)
     group_checker_config_ = json.loads(json.dumps(group_checker_config))
     group_checker_config_['selector']['initial_burst']['num_photos'] = 2
-    group_checker_config_['selector']['switch_phase']['required_photos'] = 3
+    group_checker_config_['selector']['switch_phase']['num_required_groups'] = 3
     group_checker = GroupChecker(
         tag_groups, view_groups, favorites_groups, group_checker_config_
     )

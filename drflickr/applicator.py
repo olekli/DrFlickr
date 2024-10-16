@@ -60,8 +60,7 @@ class Applicator:
         result = self.api.addPhotoToGroup(photo, group_id)
         if result.is_ok():
             # photo was added successfully
-            self.submissions.add(photo, group_id)
-            return result
+            return self.submissions.add(photo, group_id)
         else:
             result = result.unwrap_err()
             if isinstance(result, ApiError):
@@ -70,13 +69,11 @@ class Applicator:
                     logger.info(
                         f'{photo["title"]}: group {self.group_info.getName(group_id)} has photo already in pool'
                     )
-                    self.submissions.add(photo, group_id)
-                    return Ok(result)
+                    return self.submissions.add(photo, group_id)
                 elif result.code == 4:
                     # already in max pools
                     logger.info(f'{photo["title"]}: already in max pools')
-                    self.submissions.add(photo, group_id)
-                    return Ok(result)
+                    return self.submissions.add(photo, group_id)
                 elif result.code == 5:
                     # photo limit
                     logger.warning(
@@ -89,8 +86,7 @@ class Applicator:
                     logger.info(
                         f'{photo["title"]}: group {self.group_info.getName(group_id)} has photo in pending'
                     )
-                    self.submissions.add(photo, group_id)
-                    return Ok(result)
+                    return self.submissions.add(photo, group_id)
                 else:
                     logger.warning(
                         f'adding {photo["title"]} to {self.group_info.getName(group_id)}: {result}'
@@ -107,14 +103,13 @@ class Applicator:
         logger.info(f'Removing photo {photo["title"]} from group {group_id}')
         result = self.api.removePhotoFromGroup(photo, group_id)
         if result.is_ok():
-            self.submissions.remove(photo, group_id)
+            return self.submissions.remove(photo, group_id)
         else:
             result = result.unwrap_err()
             if isinstance(result, ApiError):
                 if result.code == 2:
                     # Photo already removed from pool
-                    self.submissions.remove(photo, group_id)
-                    return Ok(result)
+                    return self.submissions.remove(photo, group_id)
         return result
 
     def publishPhoto(self, photo):

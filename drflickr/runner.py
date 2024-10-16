@@ -65,16 +65,16 @@ class Runner:
             config['applicator']['throttle']['min_ms'] = 0
             config['applicator']['throttle']['max_ms'] = 1
 
-        submissions = Submissions(self.submissions_filename, dry_run=self.local_dry_run)
+        submissions = Submissions(self.submissions_filename, dry_run=self.local_dry_run).unwrap_or_raise()
         api = (
             Api(dry_run=self.dry_run, api_key=api_key, access_token=access_token)
             .load()
             .unwrap_or_return()
         )
-        stats = Stats(api, self.stats_filename).load()
+        stats = Stats(api, self.stats_filename).load().unwrap_or_raise()
 
-        self.state_store = JsonStore(self.state_store_filename, dry_run=self.local_dry_run)
-        self.blacklist_store = JsonStore(self.blacklist_filename, dry_run=self.local_dry_run)
+        self.state_store = JsonStore(self.state_store_filename, dry_run=self.local_dry_run).unwrap_or_raise()
+        self.blacklist_store = JsonStore(self.blacklist_filename, dry_run=self.local_dry_run).unwrap_or_raise()
         self.retriever = Retriever(api, submissions)
         self.logic = Logic(
             views_groups=views_groups,
@@ -91,27 +91,31 @@ class Runner:
             + [group['nsid'] for group in favorites_groups]
         ]
         group_info_updater = GroupInfoUpdater(api)
-        with self.state_store.transaction() as state:
-            state.setdefault('group_info', {})
-            state['group_info'] = group_info_updater(state['group_info'], all_groups)
+        self.state_store.transaction()
+        self.state_store.content.setdefault('group_info', {})
+        self.state_store.content['group_info'] = group_info_updater(self.state_store.content['group_info'], all_groups)
+        self.state_store.commit().unwrap_or_raise()
 
         self.applicator = Applicator(
             api,
             submissions,
-            self.state_store.view()['group_info'],
+            self.state_store.content['group_info'],
             config['applicator'],
         )
-        self.operations_review = OperationsReview(self.state_store.view()['group_info'])
+        self.operations_review = OperationsReview(self.state_store.content['group_info'])
 
         return Ok(self)
 
     @returns_result()
     def __call__(self):
-        with self.blacklist_store.transaction() as blacklist:
+        with self.blacklist_store.transaction() as t:
+            blacklist = self.blacklist_store.content
             retriever_result = self.retriever(blacklist).unwrap_or_raise()
             blacklist.clear()
             blacklist.update(retriever_result.blacklist)
-        with self.state_store.transaction() as state:
+        t.result.unwrap_or_raise()
+        with self.state_store.transaction() as t:
+            state = self.state_store.content
             state.setdefault('photos_expected', {})
             state.setdefault('logic_greylist', {})
             state.setdefault('group_info', {})
@@ -127,6 +131,7 @@ class Runner:
             state['photos_expected'] = logic_result.photos_expected
             state['logic_greylist'] = logic_result.greylist
             state['group_info'] = logic_result.group_info
+        t.result.unwrap_or_raise()
         if self.dry_run:
             writeYaml(
                 'operations-review-full.yaml', logic_result.operations
@@ -135,7 +140,8 @@ class Runner:
                 'operations-review.yaml',
                 self.operations_review(logic_result.operations),
             ).unwrap_or_return()
-        with self.state_store.transaction() as state:
+        with self.state_store.transaction() as t:
+            state = self.state_store.content
             state.setdefault('applicator_greylist', {})
             applicator_result = self.applicator(
                 logic_result.operations,
@@ -143,6 +149,7 @@ class Runner:
                 state['applicator_greylist'],
             )
             state['applicator_greylist'] = applicator_result.greylist
+        t.result.unwrap_or_return()
         logger.debug(f'reconciled: {applicator_result.result}')
 
         return Ok(applicator_result.result)
