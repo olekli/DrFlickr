@@ -22,6 +22,7 @@ class GroupInfoUpdater:
             group_info[group_id] = {'name': group_id, 'last_update': 0}
         for group_id in group_info:
             if (group_info[group_id]['last_update'] + 24 * 60 * 60) < time.time() or group_info[group_id]['ispoolmoderated']:
+                logger.info(f'updating info on group: {group_info[group_id]["name"] if "name" in group_info[group_id] else group_id}')
                 result = self.api.getGroupInfo(group_id)
                 if result:
                     group_info[group_id] = {

@@ -71,6 +71,7 @@ class Runner:
             .load()
             .unwrap_or_return()
         )
+        logger.info(f'initializing stats...')
         stats = Stats(api, self.stats_filename).load().unwrap_or_raise()
 
         self.state_store = JsonStore(self.state_store_filename, dry_run=self.local_dry_run).unwrap_or_raise()
@@ -90,6 +91,7 @@ class Runner:
             + [group['nsid'] for group in views_groups]
             + [group['nsid'] for group in favorites_groups]
         ]
+        logger.info(f'initializing group info...')
         group_info_updater = GroupInfoUpdater(api)
         self.state_store.transaction()
         self.state_store.content.setdefault('group_info', {})
@@ -104,16 +106,19 @@ class Runner:
         )
         self.operations_review = OperationsReview(self.state_store.content['group_info'])
 
+        logger.info(f'initialization done')
         return Ok(self)
 
     @returns_result()
     def __call__(self):
+        logger.info(f'retrieving photos...')
         with self.blacklist_store.transaction() as t:
             blacklist = self.blacklist_store.content
             retriever_result = self.retriever(blacklist).unwrap_or_raise()
             blacklist.clear()
             blacklist.update(retriever_result.blacklist)
         t.result.unwrap_or_raise()
+        logger.info(f'running logic...')
         with self.state_store.transaction() as t:
             state = self.state_store.content
             state.setdefault('photos_expected', {})
@@ -140,6 +145,7 @@ class Runner:
                 'operations-review.yaml',
                 self.operations_review(logic_result.operations),
             ).unwrap_or_return()
+        logger.info(f'applying changes...')
         with self.state_store.transaction() as t:
             state = self.state_store.content
             state.setdefault('applicator_greylist', {})
