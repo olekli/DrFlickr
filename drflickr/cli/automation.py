@@ -161,7 +161,8 @@ def start(daemon, logfile, interval, dry_run, debug_dry_run, config_path, run_pa
             files_preserve=preserve_fds,
             working_directory='./',
         ) as context:
-            loop(singleshot, interval, exit_flag, dry_run, debug_dry_run, config_path, run_path, creds_path)
+            with log_panic(logger):
+                loop(singleshot, interval, exit_flag, dry_run, debug_dry_run, config_path, run_path, creds_path)
     else:
         logger = create_logger(logfile, loglevel)
 
