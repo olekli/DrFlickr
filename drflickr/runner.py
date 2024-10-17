@@ -124,18 +124,21 @@ class Runner:
             state.setdefault('photos_expected', {})
             state.setdefault('logic_greylist', {})
             state.setdefault('group_info', {})
+            state.setdefault('photo_info', {})
 
             logic_result = self.logic(
                 photos_actual=retriever_result.photos_actual,
                 photos_expected=state['photos_expected'],
                 greylist=state['logic_greylist'],
                 group_info=state['group_info'],
-                blacklist=retriever_result.blacklist
+                photo_info=state['photo_info'],
+                blacklist=retriever_result.blacklist,
             )
 
             state['photos_expected'] = logic_result.photos_expected
             state['logic_greylist'] = logic_result.greylist
             state['group_info'] = logic_result.group_info
+            state['photo_info'] = logic_result.photo_info
         t.result.unwrap_or_raise()
         if self.dry_run:
             writeYaml(

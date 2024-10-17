@@ -10,6 +10,7 @@ from drflickr.reconciler import Reconciler
 
 from collections import namedtuple
 import json
+import time
 import logging
 
 logger = logging.getLogger(__name__)
@@ -33,10 +34,11 @@ class Logic:
         self.reorderer = Reorderer(config['reorderer'])
         self.reconciler = Reconciler()
 
-    def __call__(self, photos_actual, photos_expected, greylist, group_info, blacklist):
+    def __call__(self, photos_actual, photos_expected, greylist, group_info, photo_info, blacklist):
         photos_expected = json.loads(json.dumps(photos_expected))
         greylist = Greylist(json.loads(json.dumps(greylist)), self.config['greylist'])
         group_info = GroupInfo(json.loads(json.dumps(group_info)))
+        photo_info = json.loads(json.dumps(photo_info))
 
         photos_actual = {
             id: photo
@@ -47,6 +49,8 @@ class Logic:
         for id in photos_actual:
             if id not in photos_expected:
                 photos_expected[id] = json.loads(json.dumps(photos_actual[id]))
+            if id not in photo_info:
+                photo_info[id] = {}
 
         to_delete = [id for id in photos_expected if id not in photos_actual]
         for id in to_delete:
@@ -79,6 +83,8 @@ class Logic:
 
                 for set_name in to_delete:
                     del photos_expected[id]['sets'][set_name]
+            if photos_expected[id]['is_public'] and 'date_published' not in photo_info[id]:
+                photo_info[id]['date_published'] = time.time()
 
         logger.info(
             f'Managing photos: {[photo["title"] for photo in photos_expected.values()]}'
@@ -100,5 +106,5 @@ class Logic:
         operations = self.reconciler(photos_actual, photos_expected)
 
         return namedtuple(
-            'LogicResult', ['photos_expected', 'greylist', 'group_info', 'operations']
-        )(photos_expected, greylist.greylist, group_info.group_info, operations)
+            'LogicResult', ['photos_expected', 'greylist', 'group_info', 'operations', 'photo_info']
+        )(photos_expected, greylist.greylist, group_info.group_info, operations, photo_info)

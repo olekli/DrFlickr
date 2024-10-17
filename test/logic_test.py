@@ -174,7 +174,7 @@ def test_empty_input():
     greylist = {}
     photos_actual = {}
     photos_expected = {}
-    result = logic(photos_actual, photos_expected, greylist, group_info, blacklist)
+    result = logic(photos_actual, photos_expected, greylist, group_info, {}, blacklist)
     assert len(result.photos_expected) == 0
     assert len(result.greylist['group']) == 0
     assert len(result.greylist['photo']) == 0
@@ -228,7 +228,7 @@ def test_case_1():
         },
     }
     photos_expected = {}
-    result = logic(photos_actual, photos_expected, greylist, group_info, blacklist)
+    result = logic(photos_actual, photos_expected, greylist, group_info, {}, blacklist)
     assert len(result.photos_expected) == 0
     assert len(result.greylist['group']) == 0
     assert len(result.greylist['photo']) == 0
@@ -282,7 +282,7 @@ def test_case_2():
         },
     }
     photos_expected = {}
-    result = logic(photos_actual, photos_expected, greylist, group_info, blacklist)
+    result = logic(photos_actual, photos_expected, greylist, group_info, {}, blacklist)
     assert len(result.photos_expected) == 2
     assert result.photos_expected == {
         'photo-1': photos_actual['photo-1'],
@@ -343,7 +343,7 @@ def test_case_3():
         'photo-1': photos_actual['photo-1'],
         'photo-3': photos_actual['photo-3'],
     }
-    result = logic(photos_actual, photos_expected, greylist, group_info, blacklist)
+    result = logic(photos_actual, photos_expected, greylist, group_info, {}, blacklist)
     assert len(result.photos_expected) == 2
     assert result.photos_expected == {
         'photo-1': photos_actual['photo-1'],
@@ -402,7 +402,7 @@ def test_case_4():
         },
     }
     photos_expected = {}
-    result = logic(photos_actual, photos_expected, greylist, group_info, blacklist)
+    result = logic(photos_actual, photos_expected, greylist, group_info, {}, blacklist)
     assert len(result.photos_expected) == 1
     assert result.photos_expected == {'photo-3': photos_actual['photo-3']}
     assert len(result.greylist['group']) == 0
@@ -473,7 +473,7 @@ def test_case_5():
         },
         'photo-3': photos_actual['photo-3'],
     }
-    result = logic(photos_actual, photos_expected, greylist, group_info, blacklist)
+    result = logic(photos_actual, photos_expected, greylist, group_info, {}, blacklist)
     assert len(result.photos_expected) == 3
     assert result.photos_expected == {
         'photo-1': photos_actual['photo-1'],
@@ -548,7 +548,7 @@ def test_case_5_():
         },
         'photo-3': photos_actual['photo-3'],
     }
-    result = logic(photos_actual, photos_expected, greylist, group_info, blacklist)
+    result = logic(photos_actual, photos_expected, greylist, group_info, {}, blacklist)
     assert len(result.photos_expected) == 3
     assert result.photos_expected == {
         'photo-1': photos_actual['photo-1'],
@@ -623,7 +623,7 @@ def test_case_6_():
         },
         'photo-3': photos_actual['photo-3'],
     }
-    result = logic(photos_actual, photos_expected, greylist, group_info, blacklist)
+    result = logic(photos_actual, photos_expected, greylist, group_info, {}, blacklist)
     assert len(result.photos_expected) == 3
     assert result.photos_expected == {
         'photo-1': photos_actual['photo-1'],
@@ -698,7 +698,7 @@ def test_case_6():
         },
         'photo-3': photos_actual['photo-3'],
     }
-    result = logic(photos_actual, photos_expected, greylist, group_info, blacklist)
+    result = logic(photos_actual, photos_expected, greylist, group_info, {}, blacklist)
     assert len(result.photos_expected) == 3
     assert result.photos_expected == {
         'photo-1': photos_actual['photo-1'],
@@ -773,7 +773,7 @@ def test_case_7():
         },
         'photo-3': photos_actual['photo-3'],
     }
-    result = logic(photos_actual, photos_expected, greylist, group_info, blacklist)
+    result = logic(photos_actual, photos_expected, greylist, group_info, {}, blacklist)
     assert len(result.photos_expected) == 3
     assert result.photos_expected == {
         'photo-1': photos_actual['photo-1'],
@@ -848,7 +848,7 @@ def test_case_8():
         },
         'photo-3': photos_actual['photo-3'],
     }
-    result = logic(photos_actual, photos_expected, greylist, group_info, blacklist)
+    result = logic(photos_actual, photos_expected, greylist, group_info, {}, blacklist)
     assert len(result.photos_expected) == 3
     assert result.photos_expected == {
         'photo-1': photos_actual['photo-1'],
@@ -923,7 +923,7 @@ def test_case_9():
         },
         'photo-3': photos_actual['photo-3'],
     }
-    result = logic(photos_actual, photos_expected, greylist, group_info, blacklist)
+    result = logic(photos_actual, photos_expected, greylist, group_info, {}, blacklist)
     assert len(result.photos_expected) == 3
     assert result.photos_expected == photos_expected
     assert len(result.greylist['group']) == 0
@@ -996,7 +996,7 @@ def test_case_10():
         },
         'photo-3': photos_actual['photo-3'],
     }
-    result = logic(photos_actual, photos_expected, greylist, group_info, blacklist)
+    result = logic(photos_actual, photos_expected, greylist, group_info, {}, blacklist)
     assert len(result.photos_expected) == 3
     assert result.photos_expected == photos_expected
     assert len(result.greylist['group']) == 0
@@ -1069,7 +1069,7 @@ def test_case_11():
         },
         'photo-3': photos_actual['photo-3'],
     }
-    result = logic(photos_actual, photos_expected, greylist, group_info, blacklist)
+    result = logic(photos_actual, photos_expected, greylist, group_info, {}, blacklist)
     assert len(result.photos_expected) == 3
     assert result.photos_expected == photos_expected
     assert len(result.greylist['group']) == 0
@@ -1142,7 +1142,7 @@ def test_case_12():
         },
         'photo-3': photos_actual['photo-3'],
     }
-    result = logic(photos_actual, photos_expected, greylist, group_info, blacklist)
+    result = logic(photos_actual, photos_expected, greylist, group_info, {}, blacklist)
     assert len(result.photos_expected) == 3
     assert result.photos_expected == photos_expected
     assert len(result.greylist['group']) == 0
@@ -1214,7 +1214,7 @@ def test_case_9_():
         },
         'photo-3': photos_actual['photo-3'],
     }
-    result = logic(photos_actual, photos_expected, greylist, group_info, blacklist)
+    result = logic(photos_actual, photos_expected, greylist, group_info, {}, blacklist)
     assert len(result.photos_expected) == 3
     assert result.photos_expected == {
         'photo-1': photos_actual['photo-1'],
@@ -1290,7 +1290,7 @@ def test_case_10_():
         },
         'photo-3': photos_actual['photo-3'],
     }
-    result = logic(photos_actual, photos_expected, greylist, group_info, blacklist)
+    result = logic(photos_actual, photos_expected, greylist, group_info, {}, blacklist)
     assert len(result.photos_expected) == 3
     assert result.photos_expected == {
         'photo-1': photos_actual['photo-1'],
@@ -1377,7 +1377,7 @@ def test_case_11_():
         },
         'photo-3': photos_actual['photo-3'],
     }
-    result = logic(photos_actual, photos_expected, greylist, group_info, blacklist)
+    result = logic(photos_actual, photos_expected, greylist, group_info, {}, blacklist)
     assert len(result.photos_expected) == 3
     assert result.photos_expected == {
         'photo-1': photos_actual['photo-1'],
@@ -1453,7 +1453,7 @@ def test_case_12():
         },
         'photo-3': photos_actual['photo-3'],
     }
-    result = logic(photos_actual, photos_expected, greylist, group_info, blacklist)
+    result = logic(photos_actual, photos_expected, greylist, group_info, {}, blacklist)
     assert len(result.photos_expected) == 3
     assert result.photos_expected == {
         'photo-1': photos_actual['photo-1'],
@@ -1540,7 +1540,7 @@ def test_case_13():
         },
         'photo-3': photos_actual['photo-3'],
     }
-    result = logic(photos_actual, photos_expected, greylist, group_info, blacklist)
+    result = logic(photos_actual, photos_expected, greylist, group_info, {}, blacklist)
     assert len(result.photos_expected) == 3
     assert result.photos_expected == {
         'photo-1': photos_actual['photo-1'],
@@ -1615,7 +1615,7 @@ def test_case_14():
         },
         'photo-3': photos_actual['photo-3'],
     }
-    result = logic(photos_actual, photos_expected, greylist, group_info, blacklist)
+    result = logic(photos_actual, photos_expected, greylist, group_info, {}, blacklist)
     assert len(result.photos_expected) == 3
     assert result.photos_expected == {
         'photo-1': photos_actual['photo-1'],
@@ -1690,7 +1690,7 @@ def test_case_15():
         },
         'photo-3': photos_actual['photo-3'],
     }
-    result = logic(photos_actual, photos_expected, greylist, group_info, blacklist)
+    result = logic(photos_actual, photos_expected, greylist, group_info, {}, blacklist)
     assert len(result.photos_expected) == 3
     assert result.photos_expected == {
         'photo-1': photos_actual['photo-1'],
@@ -1765,7 +1765,7 @@ def test_case_16():
         },
         'photo-3': photos_actual['photo-3'],
     }
-    result = logic(photos_actual, photos_expected, greylist, group_info, blacklist)
+    result = logic(photos_actual, photos_expected, greylist, group_info, {}, blacklist)
     assert len(result.photos_expected) == 3
     assert result.photos_expected['photo-1'] == photos_actual['photo-1']
     assert result.photos_expected['photo-3'] == photos_actual['photo-3']
@@ -1854,7 +1854,7 @@ def test_case_17():
             'is_public': False,
         },
     }
-    result = logic(photos_actual, {}, greylist, group_info, blacklist)
+    result = logic(photos_actual, {}, greylist, group_info, {}, blacklist)
     assert len(result.photos_expected) == 3
     assert len(result.photos_expected['photo-2']['groups']) == 1
     group_added = result.photos_expected['photo-2']['groups'][0]
@@ -1926,7 +1926,7 @@ def test_case_18():
             'is_public': False,
         },
     }
-    result = logic(photos_actual, {}, greylist, group_info, blacklist)
+    result = logic(photos_actual, {}, greylist, group_info, {}, blacklist)
     assert len(result.photos_expected) == 3
     assert result.photos_expected == {
         'photo-1': photos_actual['photo-1'],
@@ -1989,7 +1989,7 @@ def test_case_19():
             'is_public': False,
         },
     }
-    result = logic(photos_actual, {}, greylist, group_info, blacklist)
+    result = logic(photos_actual, {}, greylist, group_info, {}, blacklist)
     assert len(result.photos_expected) == 3
     assert result.photos_expected == {
         'photo-1': photos_actual['photo-1'],
@@ -2052,7 +2052,7 @@ def test_case_20():
             'is_public': False,
         },
     }
-    result = logic(photos_actual, {}, greylist, group_info, blacklist)
+    result = logic(photos_actual, {}, greylist, group_info, {}, blacklist)
     assert len(result.photos_expected) == 3
     assert result.photos_expected == {
         'photo-1': photos_actual['photo-1'],
@@ -2128,7 +2128,7 @@ def test_case_21():
             'is_public': True,
         },
     }
-    result = logic(photos_actual, {}, greylist, group_info, blacklist)
+    result = logic(photos_actual, {}, greylist, group_info, {}, blacklist)
     assert len(result.photos_expected) == 3
     assert result.photos_expected == photos_actual
     assert len(result.greylist['group']) == 0
@@ -2182,7 +2182,7 @@ def test_case_21():
             'is_public': True,
         },
     }
-    result = logic(photos_actual, {}, greylist, group_info, blacklist)
+    result = logic(photos_actual, {}, greylist, group_info, {}, blacklist)
     assert len(result.photos_expected) == 3
     assert len(result.greylist['group']) == 0
     assert len(result.greylist['photo']) == 0
@@ -2235,7 +2235,7 @@ def test_case_21():
             'is_public': True,
         },
     }
-    result = logic(photos_actual, {}, greylist, group_info, blacklist)
+    result = logic(photos_actual, {}, greylist, group_info, {}, blacklist)
     assert len(result.photos_expected) == 3
     assert len(result.greylist['group']) == 0
     assert len(result.greylist['photo']) == 0
@@ -2289,7 +2289,7 @@ def test_case_21():
             'is_public': True,
         },
     }
-    result = logic(photos_actual, {}, greylist, group_info, blacklist)
+    result = logic(photos_actual, {}, greylist, group_info, {}, blacklist)
     assert len(result.photos_expected) == 3
     assert len(result.greylist['group']) == 0
     assert len(result.greylist['photo']) == 0
@@ -2341,12 +2341,12 @@ def test_case_22():
             'is_public': True,
         },
     }
-    result = logic(photos_actual, {}, greylist, group_info, blacklist)
+    result = logic(photos_actual, {}, greylist, group_info, {}, blacklist)
     photos_expected = result.photos_expected
     assert photos_expected == photos_actual
     photos_actual['photo-2']['views'] = 153
     photos_actual['photo-2']['faves'] = 22
-    result = logic(photos_actual, photos_expected, greylist, group_info, blacklist)
+    result = logic(photos_actual, photos_expected, greylist, group_info, {}, blacklist)
     assert len(result.photos_expected) == 3
     assert len(result.photos_expected['photo-2']['groups']) == 2
     assert 'views-100' in result.photos_expected['photo-2']['groups']
