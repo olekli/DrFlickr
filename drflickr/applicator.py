@@ -92,11 +92,16 @@ class Applicator:
                         f'adding {photo["title"]} to {self.group_info.getName(group_id)}: {result}'
                     )
                     return Err(result)
-            else:
+            elif isinstance(result, NetworkError):
                 logger.warning(
                     f'adding {photo["title"]} to {self.group_info.getName(group_id)}: {result}'
                 )
                 return Err(result)
+            else:
+                logger.critical(
+                    f'adding {photo["title"]} to {self.group_info.getName(group_id)}: {result}'
+                )
+                assert False
         assert False
 
     def removePhotoFromGroup(self, photo, group_id):

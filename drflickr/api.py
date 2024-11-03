@@ -16,7 +16,7 @@ import logging
 logger = logging.getLogger(__name__)
 
 
-class NetworkError:
+class NetworkError(Exception):
     def __init__(self, payload):
         self.payload = payload
 
@@ -30,7 +30,7 @@ class NetworkError:
         return str(self.payload)
 
 
-class ApiError:
+class ApiError(Exception):
     def __init__(self, payload):
         self.code = payload['code']
         self.message = payload['message']
