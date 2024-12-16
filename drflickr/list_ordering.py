@@ -1,6 +1,9 @@
 # Copyright 2024 Ole Kliemann
 # SPDX-License-Identifier: Apache-2.0
 
+import logging
+
+logger = logging.getLogger(__name__)
 
 def getOutOfOrderIndices(sequence):
     if len(sequence) <= 1:
@@ -11,7 +14,7 @@ def getOutOfOrderIndices(sequence):
 
     for i in range(1, n):
         for j in range(i):
-            if sequence[j] > sequence[i] and lds[j] + 1 > lds[i]:
+            if sequence[j] >= sequence[i] and lds[j] + 1 > lds[i]:
                 lds[i] = lds[j] + 1
                 predecessors[i] = j
 
