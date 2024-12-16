@@ -31,7 +31,7 @@ class Publisher:
                     reason = 'published15'
                 if len(queue) <= 10:
                     reason = 'published10'
-                greylist.add('publish', reason)
+                greylist.add('publish', 'published', reason)
                 photo_to_publish = queue[0]
                 greylist.add('photo', photo_to_publish['id'], 'published')
                 photo_to_publish['date_posted'] = int(time.time())
