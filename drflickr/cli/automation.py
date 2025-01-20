@@ -2,6 +2,7 @@
 # SPDX-License-Identifier: Apache-2.0
 
 from drflickr.runner import Runner
+from drflickr.api import ApiError, NetworkError
 from drflickr.cli.path_options import (
     config_path_option,
     run_path_option,
@@ -19,6 +20,7 @@ import logging
 import sys
 import os
 import random
+from requests.exceptions import ConnectionError
 
 pidfile_path = '/tmp/flickr-daemon.pid'
 
@@ -80,9 +82,20 @@ def loop(singleshot, interval, exit_flag, dry_run, debug_dry_run, config_path, r
     signal.signal(signal.SIGTERM, lambda s, f: signal_handler(s, f, exit_flag))
     signal.signal(signal.SIGINT, lambda s, f: signal_handler(s, f, exit_flag))
 
+    num_api_failures = 0
     while not exit_flag['flag']:
         result = run(dry_run, debug_dry_run, config_path, run_path, creds_path)
-        if not result or singleshot:
+        if singleshot:
+            break
+        if not result:
+            result = result.unwrap_err()
+            if isinstance(result, ApiError) or isinstance(result, NetworkError) or isinstance(result, ConnectionError):
+                num_api_failures += 1
+            else:
+                break
+        else:
+            num_api_failures = 0
+        if num_api_failures >= 3:
             break
 
         total_sleep = 0
